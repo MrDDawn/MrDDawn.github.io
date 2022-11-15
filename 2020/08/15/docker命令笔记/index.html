@@ -15,7 +15,7 @@
 
 
 
-<title>Hello World | 午饭吃啥</title>
+<title>docker命令笔记 | 午饭吃啥</title>
 
 
 
@@ -198,7 +198,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">Hello World</h1>
+            <h1 class="post-title">docker命令笔记</h1>
             
                 <div class="post-meta">
                     
@@ -207,7 +207,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">November 15, 2022&nbsp;&nbsp;3:35:16</a>
+                        Date: <a href="#">August 15, 2020&nbsp;&nbsp;17:38:57</a>
                         </span>
                     
                     
@@ -216,19 +216,29 @@
         </header>
 
         <div class="post-content">
-            <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+            <p>记录一些Docker命令</p>
+<h1 id="docker-命令行中it的意思"><a href="#docker-命令行中it的意思" class="headerlink" title="docker 命令行中it的意思"></a>docker 命令行中it的意思</h1><p>-i：以交互模式运行容器，通常与-t同时使用<br>-d：后台运行容器，并返回容器ID，也即启动守护式容器<br>-t：为容器重新分配一个伪输入终端，通常与-i同时使用</p>
+<h1 id="docker-p-111-111"><a href="#docker-p-111-111" class="headerlink" title="docker -p 111:111"></a>docker -p 111:111</h1><p>把dockertcp111端口映射到宿主机的111端口</p>
+<h1 id="docker-p-192-168-1-100-8080-80"><a href="#docker-p-192-168-1-100-8080-80" class="headerlink" title="docker -p 192.168.1.100:8080:80"></a>docker -p 192.168.1.100:8080:80</h1><p>将容器的TCP80端口映射到IP地址为192.168.1.100宿主机的8080端口</p>
+<h1 id="docker-p-8080-80-x2F-tcp-p-8080-80-x2F-udp"><a href="#docker-p-8080-80-x2F-tcp-p-8080-80-x2F-udp" class="headerlink" title="docker -p 8080:80&#x2F;tcp -p 8080:80&#x2F;udp"></a>docker -p 8080:80&#x2F;tcp -p 8080:80&#x2F;udp</h1><p>同时映射TCP和UDP端口</p>
+<h1 id="docker-exec-it-‘id’-bash"><a href="#docker-exec-it-‘id’-bash" class="headerlink" title="docker exec -it ‘id’ bash"></a>docker exec -it ‘id’ bash</h1><p>在容器id中以交互模式启动一个终端</p>
+<h1 id="docker-ps-a"><a href="#docker-ps-a" class="headerlink" title="docker ps -a"></a>docker ps -a</h1><p>查看所有的容器</p>
+<h1 id="docker-pull-ubuntu"><a href="#docker-pull-ubuntu" class="headerlink" title="docker pull ubuntu"></a>docker pull ubuntu</h1><p>下载ubuntu镜像</p>
+<h1 id="docker-run-it-ubuntu-x2F-bin-x2F-bash"><a href="#docker-run-it-ubuntu-x2F-bin-x2F-bash" class="headerlink" title="docker run -it ubuntu &#x2F;bin&#x2F;bash"></a>docker run -it ubuntu &#x2F;bin&#x2F;bash</h1><p>启动ubuntu镜像，参数为以命令行模式进入镜像<br>&#x2F;bin&#x2F;bash 放在镜像后面的是命令，因为用的是交互式shell,所以用的是&#x2F;bin&#x2F;bash</p>
+<h1 id="docker-start-container"><a href="#docker-start-container" class="headerlink" title="docker start container"></a>docker start container</h1><p>启动一个已停止的容器</p>
+<h1 id="docker-stop-container"><a href="#docker-stop-container" class="headerlink" title="docker stop container"></a>docker stop container</h1><p>停止正在运行的容器</p>
+<h1 id="restart"><a href="#restart" class="headerlink" title="restart"></a>restart</h1><p>重启</p>
+<h1 id="进入容器"><a href="#进入容器" class="headerlink" title="进入容器"></a>进入容器</h1><p>在使用 -d 参数时，容器启动后会进入后台。此时想要进入容器，可以通过以下指令进入：<br>docker attach container &#x2F;&#x2F;注意： 如果从这个容器退出，会导致容器的停止。<br>docker exec：推荐使用 docker exec 命令，因为此命令会退出容器终端，但不会导致容器的停止。</p>
+<h1 id="导出容器"><a href="#导出容器" class="headerlink" title="导出容器"></a>导出容器</h1><p>docker  export ubuntu &gt; ubuntu.rar</p>
+<h1 id="导入容器快照"><a href="#导入容器快照" class="headerlink" title="导入容器快照"></a>导入容器快照</h1><p>docker import &#x2F;&#x2F;后面可以使url</p>
+<h1 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h1><p>docker rm -f container</p>
+<h1 id="清理掉所有处于终止状态的容器。"><a href="#清理掉所有处于终止状态的容器。" class="headerlink" title="清理掉所有处于终止状态的容器。"></a>清理掉所有处于终止状态的容器。</h1><p>docker container prune</p>
+<h1 id="docker-pull-training-x2F-webapp"><a href="#docker-pull-training-x2F-webapp" class="headerlink" title="docker pull training&#x2F;webapp"></a>docker pull training&#x2F;webapp</h1><p>载入镜像</p>
+<h1 id="docker-run-d-P-training-x2F-webapp-python-app-py"><a href="#docker-run-d-P-training-x2F-webapp-python-app-py" class="headerlink" title="docker run -d -P training&#x2F;webapp python app.py"></a>docker run -d -P training&#x2F;webapp python app.py</h1><p>-d:让容器在后台运行。<br>-P:将容器内部使用的网络端口随机映射到我们使用的主机上</p>
+<h1 id="docker-port"><a href="#docker-port" class="headerlink" title="docker port"></a>docker port</h1><p>可以查看指定 （ID 或者名字）容器的某个确定端口映射到宿主机的端口号。</p>
+<h1 id="导入docker镜像名字为oadocker"><a href="#导入docker镜像名字为oadocker" class="headerlink" title="导入docker镜像名字为oadocker"></a>导入docker镜像名字为oadocker</h1><p>wget -q –show-progress    <a target="_blank" rel="noopener" href="https://wufanchisha.cn/oadocker.rar">https://wufanchisha.cn/oadocker.rar</a><br>docker import oadocker.rar  oadocker<br>rm oadocker.rar<br>docker run -it -p 3888:3888 oadocker &#x2F;bin&#x2F;bash &#x2F;root&#x2F;runnode.sh 1</p>
+<h1 id="docker-–privileged-x3D-true"><a href="#docker-–privileged-x3D-true" class="headerlink" title="docker –privileged&#x3D;true"></a>docker –privileged&#x3D;true</h1><p>使用该参数，container内的root拥有真正的root权限。<br>否则，container内的root只是外部的一个普通用户权限。<br>privileged启动的容器，可以看到很多host上的设备，并且可以执行mount。<br>甚至允许你在docker容器中启动docker容器。</p>
+<h1 id="docker-–cap-add"><a href="#docker-–cap-add" class="headerlink" title="docker –cap-add"></a>docker –cap-add</h1><p>添加权限<br>属于细粒度权限</p>
 
         </div>
 
@@ -243,7 +253,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://example.com/2022/11/15/hello-world/">http://example.com/2022/11/15/hello-world/</a></span>
+                        <span><a href="http://example.com/2020/08/15/docker%E5%91%BD%E4%BB%A4%E7%AC%94%E8%AE%B0/">http://example.com/2020/08/15/docker%E5%91%BD%E4%BB%A4%E7%AC%94%E8%AE%B0/</a></span>
                     </p>
                 
                 
@@ -266,6 +276,10 @@
                 <span>Tag(s):</span>
                 <span class="tag">
                     
+                    
+                        <a href="/tags/docker/"># docker</a>
+                    
+                        
                 </span>
             </div>
             <div>
