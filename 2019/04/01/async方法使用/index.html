@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="dc">
+
+
+    <meta name="subtitle" content="螺蛳粉">
+
+
+
+
+<title>async方法使用 | 午饭吃啥</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">午饭吃啥</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">午饭吃啥</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">async方法使用</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">dc</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">April 1, 2019&nbsp;&nbsp;16:59:38</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="函数原型"><a href="#函数原型" class="headerlink" title="函数原型"></a>函数原型</h1><p>std::async函数原型如下</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">Function</span>, <span class="keyword">class</span>... Args&gt;</span><br><span class="line">std::future&lt;std::<span class="type">result_of_t</span>&lt;std::<span class="built_in">decay_t</span>&lt;Function&gt;(std::<span class="type">decay_t</span>&lt;Args&gt;...)&gt;&gt;</span><br><span class="line">    <span class="built_in">async</span>( Function&amp;&amp; f, Args&amp;&amp;... args );</span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">Function</span>, <span class="keyword">class</span>... Args&gt;</span><br><span class="line">std::future&lt;std::<span class="type">invoke_result_t</span>&lt;std::<span class="type">decay_t</span>&lt;Function&gt;,</span><br><span class="line">                                 std::<span class="type">decay_t</span>&lt;Args&gt;...&gt;&gt;</span><br><span class="line">    <span class="built_in">async</span>( Function&amp;&amp; f, Args&amp;&amp;... args );</span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">Function</span>, <span class="keyword">class</span>... Args&gt;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">Function</span>, <span class="keyword">class</span>... Args &gt;</span><br><span class="line">std::future&lt;std::<span class="type">result_of_t</span>&lt;std::<span class="built_in">decay_t</span>&lt;Function&gt;(std::<span class="type">decay_t</span>&lt;Args&gt;...)&gt;&gt;</span><br><span class="line">    <span class="built_in">async</span>( std::launch policy, Function&amp;&amp; f, Args&amp;&amp;... args );</span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">Function</span>, <span class="keyword">class</span>... Args &gt;</span><br><span class="line">std::future&lt;std::<span class="type">invoke_result_t</span>&lt;std::<span class="type">decay_t</span>&lt;Function&gt;,</span><br><span class="line">                                 std::<span class="type">decay_t</span>&lt;Args&gt;...&gt;&gt;</span><br><span class="line">    <span class="built_in">async</span>( std::launch policy, Function&amp;&amp; f, Args&amp;&amp;... args );</span><br><span class="line"><span class="keyword">template</span>&lt; <span class="keyword">class</span> <span class="title class_">Function</span>, <span class="keyword">class</span>... Args &gt;</span><br></pre></td></tr></table></figure>
+
+<h1 id="函数说明"><a href="#函数说明" class="headerlink" title="函数说明"></a>函数说明</h1><p>std::async是对异步编程的高级封装，封装了sd::future的操作，基本是上可以代替std::thread的操作，这里代替并不是盲目的代替，需要根据具体场景来使用</p>
+<p>std::future可以从异步任务中获取结果，一般与std::async配合使用，std::async用于创建同步&#x2F;异步任务，实际上就是创建一个线程执行相应任务</p>
+<p>std::async中Function接受一个可调用的对象(仿函数、lambda表达式、、类成员函数、普通函数等)作为参数,并且异步或是同步执行他们</p>
+<p>std::launch 是执行策略，由一下集中情况：</p>
+<ul>
+<li>std::launch::async 传递的可调用对象异步执行</li>
+<li>std::launch::deferred 传递的可调用对象同步执行</li>
+<li>std::launch::async | std::launch::deferred 可以异步或是同步，取决于操作系统，我们无法控制</li>
+<li>如果我们不指定策略，则相当于3</li>
+</ul>
+<p>对于执行结果我们可以使用get、wait、wait_for、wait_until等待执行结束，区别是get可以获得执行的结果。如果选择异步执行策略，调用get时，如果异步执行没有结束，get会阻塞当前调用线程，直到异步执行结束并获得结果，如果异步执行已经结束，不等待获取执行结果；如果选择同步执行策略，只有当调用get函数时，同步调用才真正执行，这也被称为函数调用被延迟。</p>
+<p>返回结果std::future的状态：</p>
+<p>deffered：异步操作还没有开始<br>ready：异步操作已经完成<br>timeout：异步操作超时</p>
+<h1 id="示例代码"><a href="#示例代码" class="headerlink" title="示例代码"></a>示例代码</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std;</span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> std::chrono;</span><br><span class="line"><span class="function">std::string <span class="title">ProcessData1</span><span class="params">(std::string recvData)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;ProcessData1 Start&quot;</span> &lt;&lt; this_thread::<span class="built_in">get_id</span>() &lt;&lt; endl;</span><br><span class="line">    this_thread::<span class="built_in">sleep_for</span>(<span class="built_in">seconds</span>(<span class="number">5</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;ProcessData1_&quot;</span> + recvData;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">string <span class="title">ProcessData2</span><span class="params">(string recvData)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;ProcessData2 start&quot;</span> &lt;&lt; this_thread::<span class="built_in">get_id</span>() &lt;&lt; endl;</span><br><span class="line">    this_thread::<span class="built_in">sleep_for</span>(<span class="built_in">seconds</span>(<span class="number">3</span>));</span><br><span class="line">    <span class="keyword">return</span> <span class="string">&quot;ProcessData1_&quot;</span>+ recvData;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">(<span class="type">int</span> argc, <span class="type">char</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line"></span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;main start&quot;</span> &lt;&lt; this_thread::<span class="built_in">get_id</span>() &lt;&lt; endl;</span><br><span class="line">    <span class="comment">//计时</span></span><br><span class="line">    system_clock::time_point start = system_clock::<span class="built_in">now</span>();</span><br><span class="line"></span><br><span class="line">    future&lt;string&gt; resultProcessData1 = <span class="built_in">async</span>(launch::async, ProcessData1, <span class="string">&quot;async1&quot;</span>);</span><br><span class="line">    future&lt;string&gt; resultProcessData2 = <span class="built_in">async</span>(launch::deferred, ProcessData2, <span class="string">&quot;async2&quot;</span>);</span><br><span class="line">    <span class="comment">//当设置为同步，直到get函数执行才开始执行任务</span></span><br><span class="line">    string resultData2 = resultProcessData2.<span class="built_in">get</span>();</span><br><span class="line"></span><br><span class="line"><span class="comment">//注释行是使用第二种方法wait_for，通过判断future_status状态来获取执行结果</span></span><br><span class="line"><span class="comment">//    future_status status;</span></span><br><span class="line"><span class="comment">//    string strData;</span></span><br><span class="line"><span class="comment">//    do</span></span><br><span class="line"><span class="comment">//    &#123;</span></span><br><span class="line"><span class="comment">//        status = resultProcessData1.wait_for(chrono::seconds(1));</span></span><br><span class="line"><span class="comment">//        switch (status)</span></span><br><span class="line"><span class="comment">//        &#123;</span></span><br><span class="line"><span class="comment">//        case future_status::ready:</span></span><br><span class="line"><span class="comment">//            cout &lt;&lt; &quot;Ready&quot; &lt;&lt; endl;    		  </span></span><br><span class="line"><span class="comment">//            strData = resultProcessData1.get();</span></span><br><span class="line"><span class="comment">//            cout &lt;&lt; strData &lt;&lt; endl;</span></span><br><span class="line"><span class="comment">//            break;</span></span><br><span class="line"><span class="comment">//        case future_status::timeout:</span></span><br><span class="line"><span class="comment">//            cout &lt;&lt; &quot;time out&quot; &lt;&lt; endl;</span></span><br><span class="line"><span class="comment">//            break;</span></span><br><span class="line"><span class="comment">//        case future_status::deferred:</span></span><br><span class="line"><span class="comment">//            cout &lt;&lt; &quot;deferred&quot; &lt;&lt; endl;</span></span><br><span class="line"><span class="comment">//            break;</span></span><br><span class="line"><span class="comment">//        default:</span></span><br><span class="line"><span class="comment">//            break;</span></span><br><span class="line"><span class="comment">//        &#125;</span></span><br><span class="line"><span class="comment">//    &#125;while(status != future_status::ready);</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">//如果ProcessData1没有执行完成，则get会阻塞</span></span><br><span class="line">    string resultData1 = resultProcessData1.<span class="built_in">get</span>();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//打印耗时时间</span></span><br><span class="line">    <span class="keyword">auto</span> end = system_clock::<span class="built_in">now</span>();</span><br><span class="line">    <span class="keyword">auto</span> diff = <span class="built_in">duration_cast</span>&lt;chrono::seconds&gt;(end -start).<span class="built_in">count</span>();</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;Total Time Token = &quot;</span> &lt;&lt; diff &lt;&lt; <span class="string">&quot;Seconds&quot;</span> &lt;&lt; endl;</span><br><span class="line">    string data = resultData1 + <span class="string">&quot;::&quot;</span> + resultData2;</span><br><span class="line">    cout &lt;&lt; <span class="string">&quot;data = &quot;</span> &lt;&lt; data &lt;&lt; endl;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>下面贴出cppreference的示例代码</p>
+<p><a target="_blank" rel="noopener" href="https://en.cppreference.com/w/cpp/thread/async">https://en.cppreference.com/w/cpp/thread/async</a></p>
+ <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line">std::mutex m;</span><br><span class="line"><span class="keyword">struct</span> <span class="title class_">X</span> &#123;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">foo</span><span class="params">(<span class="type">int</span> i, <span class="type">const</span> std::string&amp; str)</span> </span>&#123;</span><br><span class="line">        <span class="function">std::lock_guard&lt;std::mutex&gt; <span class="title">lk</span><span class="params">(m)</span></span>;</span><br><span class="line">        std::cout &lt;&lt; str &lt;&lt; <span class="string">&#x27; &#x27;</span> &lt;&lt; i &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">void</span> <span class="title">bar</span><span class="params">(<span class="type">const</span> std::string&amp; str)</span> </span>&#123;</span><br><span class="line">        <span class="function">std::lock_guard&lt;std::mutex&gt; <span class="title">lk</span><span class="params">(m)</span></span>;</span><br><span class="line">        std::cout &lt;&lt; str &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="type">int</span> <span class="title">operator</span><span class="params">()</span><span class="params">(<span class="type">int</span> i)</span> </span>&#123;</span><br><span class="line">        <span class="function">std::lock_guard&lt;std::mutex&gt; <span class="title">lk</span><span class="params">(m)</span></span>;</span><br><span class="line">        std::cout &lt;&lt; i &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line">        <span class="keyword">return</span> i + <span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">template</span> &lt;<span class="keyword">typename</span> RandomIt&gt;</span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">parallel_sum</span><span class="params">(RandomIt beg, RandomIt end)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">auto</span> len = end - beg;</span><br><span class="line">    <span class="keyword">if</span> (len &lt; <span class="number">1000</span>)</span><br><span class="line">        <span class="keyword">return</span> std::<span class="built_in">accumulate</span>(beg, end, <span class="number">0</span>);</span><br><span class="line"></span><br><span class="line">    RandomIt mid = beg + len/<span class="number">2</span>;</span><br><span class="line">    <span class="keyword">auto</span> handle = std::<span class="built_in">async</span>(std::launch::async,</span><br><span class="line">                             parallel_sum&lt;RandomIt&gt;, mid, end);</span><br><span class="line">    <span class="type">int</span> sum = <span class="built_in">parallel_sum</span>(beg, mid);</span><br><span class="line">    <span class="keyword">return</span> sum + handle.<span class="built_in">get</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="function">std::vector&lt;<span class="type">int</span>&gt; <span class="title">v</span><span class="params">(<span class="number">10000</span>, <span class="number">1</span>)</span></span>;</span><br><span class="line">    std::cout &lt;&lt; <span class="string">&quot;The sum is &quot;</span> &lt;&lt; <span class="built_in">parallel_sum</span>(v.<span class="built_in">begin</span>(), v.<span class="built_in">end</span>()) &lt;&lt; <span class="string">&#x27;\n&#x27;</span>;</span><br><span class="line"></span><br><span class="line">    X x;</span><br><span class="line">    <span class="comment">// Calls (&amp;x)-&gt;foo(42, &quot;Hello&quot;) with default policy:</span></span><br><span class="line">    <span class="comment">// may print &quot;Hello 42&quot; concurrently or defer execution</span></span><br><span class="line">    <span class="keyword">auto</span> a1 = std::<span class="built_in">async</span>(&amp;X::foo, &amp;x, <span class="number">42</span>, <span class="string">&quot;Hello&quot;</span>);</span><br><span class="line">    <span class="comment">// Calls x.bar(&quot;world!&quot;) with deferred policy</span></span><br><span class="line">    <span class="comment">// prints &quot;world!&quot; when a2.get() or a2.wait() is called</span></span><br><span class="line">    <span class="keyword">auto</span> a2 = std::<span class="built_in">async</span>(std::launch::deferred, &amp;X::bar, x, <span class="string">&quot;world!&quot;</span>);</span><br><span class="line">    <span class="comment">// Calls X()(43); with async policy</span></span><br><span class="line">    <span class="comment">// prints &quot;43&quot; concurrently</span></span><br><span class="line">    <span class="keyword">auto</span> a3 = std::<span class="built_in">async</span>(std::launch::async, <span class="built_in">X</span>(), <span class="number">43</span>);</span><br><span class="line">    a2.<span class="built_in">wait</span>();                     <span class="comment">// prints &quot;world!&quot;</span></span><br><span class="line">    std::cout &lt;&lt; a3.<span class="built_in">get</span>() &lt;&lt; <span class="string">&#x27;\n&#x27;</span>; <span class="comment">// prints &quot;53&quot;</span></span><br><span class="line">&#125; <span class="comment">// if a1 is not done at this point, destructor of a1 prints &quot;Hello 42&quot; here</span></span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>dc</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2019/04/01/async%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8/">http://example.com/2019/04/01/async%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/C/"># C++</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/05/15/c-11%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E6%B1%A0/">c++11实现线程池</a>
+            
+            
+            <a class="next" rel="next" href="/2019/03/10/C-%E5%BC%BA%E5%88%B6%E7%B1%BB%E5%9E%8B%E8%BD%AC%E6%8D%A2/">C++强制类型转换</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© dc | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>

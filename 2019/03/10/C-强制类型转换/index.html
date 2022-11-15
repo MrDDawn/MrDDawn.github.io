@@ -227,7 +227,7 @@
 <p>如果用上述新的类型转换方法，应该这样写：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="type">double</span> result = <span class="built_in">static_cast</span>&lt;<span class="type">double</span>&gt;(firstNumber)/secondNumber;</span><br></pre></td></tr></table></figure>
 <p>这样的类型转换不论是对人工还是对程序都很容易识别。</p>
-<h1 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast"></a>static_cast</h1><p>static_cast 在功能上基本上与 C 风格的类型转换一样强大，含义也一样。它也有功能上限制。例如，你不能用</p>
+<h1 id="static-cast"><a href="#static-cast" class="headerlink" title="static_cast  "></a>static_cast  </h1><p>static_cast 在功能上基本上与 C 风格的类型转换一样强大，含义也一样。它也有功能上限制。例如，你不能用</p>
 <p>static_cast 象用 C 风格的类型转换一样把 struct 转换成 int 类型或者把 double 类型转换成指针类型，不能从表达</p>
 <p>式中去除 const 属性，因为另一个新的类型转换操作符 const_cast 有这样的功能</p>
 <p>static_cast主要作用</p>
@@ -235,9 +235,10 @@
 <li><p>该函数主要用于基本类型之间和具有继承关系的类型之间的转换</p>
 </li>
 <li><p>这种转换一般会更改变量的内部表示方式，因此，static_cast应用于指针类型转换没有太大意义</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//基本类型转换</span></span><br><span class="line"><span class="type">int</span> i=<span class="number">0</span>;</span><br><span class="line"><span class="type">double</span> d = <span class="built_in">static_cast</span>&lt;<span class="type">double</span>&gt;(i); <span class="comment">//等价于 double d = (double)i;</span></span><br><span class="line"><span class="comment">//转换继承类的对象为基类对象</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span>&#123;&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base&#123;&#125;;</span><br><span class="line">Derived d;</span><br><span class="line">Base b = <span class="built_in">static_cast</span>&lt;Base&gt;(d); <span class="comment">//等价于 Base b = (Base)d;</span></span><br></pre></td></tr></table></figure></li>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//基本类型转换</span></span><br><span class="line"><span class="type">int</span> i=<span class="number">0</span>;</span><br><span class="line"><span class="type">double</span> d = <span class="built_in">static_cast</span>&lt;<span class="type">double</span>&gt;(i); <span class="comment">//等价于 double d = (double)i;</span></span><br><span class="line"><span class="comment">//转换继承类的对象为基类对象</span></span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Base</span>&#123;&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">Derived</span> : <span class="keyword">public</span> Base&#123;&#125;;</span><br><span class="line">Derived d;</span><br><span class="line">Base b = <span class="built_in">static_cast</span>&lt;Base&gt;(d); <span class="comment">//等价于 Base b = (Base)d;</span></span><br></pre></td></tr></table></figure>
+<h1 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h1></li>
 </ul>
-<h1 id="const-cast"><a href="#const-cast" class="headerlink" title="const_cast"></a>const_cast</h1><p>const_cast 用于类型转换掉表达式的 const 或 volatileness 属性。通过使用 const_cast，你向人们和编译器强调你通过类型转换想做的只是改变一些东西的 constness 或者 volatileness 属性。这个含义被编译器所约束。如果你试图使用 const_cast 来完成修改 constness 或者 volatileness 属性之外的事情，你的类型转换将被拒绝</p>
+<p>const_cast 用于类型转换掉表达式的 const 或 volatileness 属性。通过使用 const_cast，你向人们和编译器强调你通过类型转换想做的只是改变一些东西的 constness 或者 volatileness 属性。这个含义被编译器所约束。如果你试图使用 const_cast 来完成修改 constness 或者 volatileness 属性之外的事情，你的类型转换将被拒绝</p>
 <p>const_cast主要作用</p>
 <ul>
 <li><p>该函数用于去除指针变量的常量属性，将它转换为一个对应指针类型的普通变量。反过来，也可以将一个非常量的指针变量转换为一个常指针变量</p>
@@ -317,10 +318,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2022/11/15/hello-world/">Hello World</a>
+                <a class="prev" rel="prev" href="/2019/04/01/async%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8/">async方法使用</a>
             
             
-            <a class="next" rel="next" href="/2019/01/15/C-%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E6%89%A7%E8%A1%8C%E4%B8%80%E4%B8%AA%E4%BB%BB%E5%8A%A1/">C++实现定时执行一个任务</a>
+            <a class="next" rel="next" href="/2019/01/10/C-%E5%AE%9E%E7%8E%B0%E5%AE%9A%E6%97%B6%E6%89%A7%E8%A1%8C%E4%B8%80%E4%B8%AA%E4%BB%BB%E5%8A%A1/">C++实现定时执行一个任务</a>
             
         </section>
 

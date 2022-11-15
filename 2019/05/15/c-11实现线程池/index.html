@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="dc">
+
+
+    <meta name="subtitle" content="螺蛳粉">
+
+
+
+
+<title>c++11实现线程池 | 午饭吃啥</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">午饭吃啥</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">午饭吃啥</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+        <div class="post-toc">
+    <div class="tocbot-list">
+    </div>
+    <div class="tocbot-list-menu">
+        <a class="tocbot-toc-expand" onclick="expand_toc()">Expand all</a>
+        <a onclick="go_top()">Back to top</a>
+        <a onclick="go_bottom()">Go to bottom</a>
+    </div>
+</div>
+
+<script>
+    var tocbot_timer;
+    var DEPTH_MAX = 6; // 为 6 时展开所有
+    var tocbot_default_config = {
+        tocSelector: '.tocbot-list',
+        contentSelector: '.post-content',
+        headingSelector: 'h1, h2, h3, h4, h5',
+        orderedList: false,
+        scrollSmooth: true,
+        onClick: extend_click,
+    };
+
+    function extend_click() {
+        clearTimeout(tocbot_timer);
+        tocbot_timer = setTimeout(function() {
+            tocbot.refresh(obj_merge(tocbot_default_config, {
+                hasInnerContainers: true
+            }));
+        }, 420); // 这个值是由 tocbot 源码里定义的 scrollSmoothDuration 得来的
+    }
+
+    document.ready(function() {
+        tocbot.init(obj_merge(tocbot_default_config, {
+            collapseDepth: 1
+        }));
+    });
+
+    function expand_toc() {
+        var b = document.querySelector('.tocbot-toc-expand');
+        var expanded = b.getAttribute('data-expanded');
+        expanded ? b.removeAttribute('data-expanded') : b.setAttribute('data-expanded', true);
+        tocbot.refresh(obj_merge(tocbot_default_config, {
+            collapseDepth: expanded ? 1 : DEPTH_MAX
+        }));
+        b.innerText = expanded ? 'Expand all' : 'Collapse all';
+    }
+
+    function go_top() {
+        window.scrollTo(0, 0);
+    }
+
+    function go_bottom() {
+        window.scrollTo(0, document.body.scrollHeight);
+    }
+
+    function obj_merge(target, source) {
+        for (var item in source) {
+            if (source.hasOwnProperty(item)) {
+                target[item] = source[item];
+            }
+        }
+        return target;
+    }
+</script>
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">c++11实现线程池</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">dc</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 15, 2019&nbsp;&nbsp;17:04:33</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p>一般而言,线程池有以下几个部分:</p>
+<p>完成主要任务的一个或多个线程。<br>用于调度管理的管理线程。<br>要求执行的任务队列。<br>简单来说就是线程过多会带来调度开销，进而影响缓存局部性和整体性能，而线程池维护着多个线程，等待管理者分配并发这姓的任务，从而避免了在处理短时间任务时创建与销毁线程的代价，线程池不仅能保证内核的充分利用，还能防止过分调度。可用线程数量应该取决于可用的并发处理器、处理器内核、内存、网络等的数量</p>
+<h1 id="线程池的组成"><a href="#线程池的组成" class="headerlink" title="线程池的组成"></a>线程池的组成</h1><p>创建一定数量的线程，启动线程，调配任务，管理着线程池</p>
+<p>代码中主要使用功能</p>
+<p>在构造创建创建一定数量的线程池,进行线程循环<br>stop(void)停止所有线程循环，回收所有资源<br>add_task()和 &lt;&lt; 添加一个任务，添加任务的时候可以使用lambda表达式</p>
+<h1 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h1><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">thread_pool</span> &#123;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">//在构造中创建一定数量(threadnums)的线程  </span></span><br><span class="line">  <span class="function"><span class="keyword">explicit</span> <span class="title">thread_pool</span><span class="params">(std::<span class="type">size_t</span> threadnums)</span></span>;</span><br><span class="line">  <span class="comment">//析构</span></span><br><span class="line">  ~<span class="built_in">thread_pool</span>(<span class="type">void</span>);</span><br><span class="line">  <span class="comment">//拷贝构造</span></span><br><span class="line">  <span class="built_in">thread_pool</span>(<span class="type">const</span> thread_pool&amp;) = <span class="keyword">delete</span>;</span><br><span class="line">  <span class="comment">//赋值运算符</span></span><br><span class="line">  thread_pool&amp; <span class="keyword">operator</span>=(<span class="type">const</span> thread_pool&amp;) = <span class="keyword">delete</span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">//定义一个没有参数的函数指针类型</span></span><br><span class="line">  <span class="keyword">typedef</span> std::function&lt;<span class="type">void</span>()&gt; <span class="type">task_t</span>;</span><br><span class="line">  <span class="comment">//像线程池队列中添加一个任务</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">add_task</span><span class="params">(<span class="type">const</span> <span class="type">task_t</span>&amp; task)</span></span>;</span><br><span class="line">  <span class="comment">//重载&lt;&lt;操作符，和add_task功能一样</span></span><br><span class="line">  thread_pool&amp; <span class="keyword">operator</span>&lt;&lt;(<span class="type">const</span> <span class="type">task_t</span>&amp; task);</span><br><span class="line">  <span class="comment">//停止线程池，并等待工作中的线程执行完成</span></span><br><span class="line">  <span class="comment">//如果某些任务处于挂起状态，则不会执行这些任务</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">stop</span><span class="params">(<span class="type">void</span>)</span></span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">//返回线程池是否在运行</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">is_running</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span></span>;</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">  <span class="comment">//重置线程池中的数量</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">set_nb_threads</span><span class="params">(std::<span class="type">size_t</span> nb_threads)</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="comment">//线程函数</span></span><br><span class="line">  <span class="function"><span class="type">void</span> <span class="title">run</span><span class="params">(<span class="type">void</span>)</span></span>;</span><br><span class="line">  <span class="comment">//从任务队列里获取一个新的任务</span></span><br><span class="line">  <span class="function">std::pair&lt;<span class="type">bool</span>, <span class="type">task_t</span>&gt; <span class="title">fetch_task_or_stop</span><span class="params">(<span class="type">void</span>)</span></span>;</span><br><span class="line">  <span class="comment">//判断线程是否停止</span></span><br><span class="line">  <span class="function"><span class="type">bool</span> <span class="title">should_stop</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">  <span class="comment">//工作线程列表</span></span><br><span class="line">  std::list&lt;std::thread&gt; m_workers;</span><br><span class="line">  <span class="comment">//允许创建的最大线程数量</span></span><br><span class="line">  std::atomic&lt;std::<span class="type">size_t</span>&gt; m_max_nb_threads = <span class="built_in">ATOMIC_VAR_INIT</span>(<span class="number">0</span>);</span><br><span class="line">  <span class="comment">//当前正在运行的线程数</span></span><br><span class="line">  std::atomic&lt;std::<span class="type">size_t</span>&gt; m_nb_running_threads = <span class="built_in">ATOMIC_VAR_INIT</span>(<span class="number">0</span>);</span><br><span class="line">  <span class="comment">//线程是否应该停止</span></span><br><span class="line">  std::atomic&lt;<span class="type">bool</span>&gt; m_should_stop = <span class="built_in">ATOMIC_VAR_INIT</span>(<span class="literal">false</span>);</span><br><span class="line">  <span class="comment">//任务队列</span></span><br><span class="line">  std::queue&lt;<span class="type">task_t</span>&gt; m_tasks;</span><br><span class="line">  <span class="comment">//互斥锁</span></span><br><span class="line">  std::mutex m_tasks_mtx;</span><br><span class="line">  <span class="comment">//条件变量</span></span><br><span class="line">  std::condition_variable m_tasks_condvar;</span><br><span class="line">&#125;;</span><br><span class="line">thread_pool::<span class="built_in">thread_pool</span>(std::<span class="type">size_t</span> nb_threads)</span><br><span class="line">&#123;</span><br><span class="line">  	std::cout &lt;&lt; <span class="string">&quot;create thread_pool&quot;</span>;</span><br><span class="line">  	<span class="built_in">set_nb_threads</span>(nb_threads);</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">thread_pool::~<span class="built_in">thread_pool</span>(<span class="type">void</span>)</span><br><span class="line">&#123;</span><br><span class="line">	std::cout &lt;&lt; <span class="string">&quot;destroy thread_pool&quot;</span>;</span><br><span class="line">  	<span class="built_in">stop</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">thread_pool::run</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  std::cout &lt;&lt; <span class="string">&quot;start run() worker&quot;</span>;</span><br><span class="line">  <span class="keyword">while</span> (<span class="literal">true</span>) &#123;</span><br><span class="line">    <span class="keyword">auto</span> res     = <span class="built_in">fetch_task_or_stop</span>();</span><br><span class="line">    <span class="type">bool</span> stopped = res.first;</span><br><span class="line">    <span class="type">task_t</span> task  = res.second;</span><br><span class="line"></span><br><span class="line">    <span class="comment">//停止线程</span></span><br><span class="line">    <span class="keyword">if</span> (stopped) &#123;</span><br><span class="line">      <span class="keyword">break</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (task) &#123;</span><br><span class="line">      std::cout &lt;&lt;<span class="string">&quot;execute task&quot;</span>;</span><br><span class="line">      <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="comment">//执行任务</span></span><br><span class="line">        <span class="built_in">task</span>();</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="built_in">catch</span> (<span class="type">const</span> std::exception&amp;)</span><br><span class="line">      &#123;</span><br><span class="line">          std::cout &lt;&lt;<span class="string">&quot;uncatched exception propagated up to the threadpool.&quot;</span>;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      std::cout &lt;&lt;<span class="string">&quot;execution complete&quot;</span>;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> std::cout &lt;&lt;<span class="string">&quot;stop run() worker&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">thread_pool::stop</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  	<span class="keyword">if</span> (!<span class="built_in">is_running</span>()) &#123; <span class="keyword">return</span>; &#125;</span><br><span class="line">  	m_should_stop = <span class="literal">true</span>;</span><br><span class="line">  	m_tasks_condvar.<span class="built_in">notify_all</span>();</span><br><span class="line">    <span class="comment">//等待所有在执行任务的线程执行完毕</span></span><br><span class="line">  	<span class="keyword">for</span> (<span class="keyword">auto</span>&amp; worker : m_workers) &#123; worker.<span class="built_in">join</span>(); &#125;</span><br><span class="line">  	m_workers.<span class="built_in">clear</span>();</span><br><span class="line">  	std::cout &lt;&lt; <span class="string">&quot;thread_pool stopped&quot;</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">thread_pool::is_running</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> !m_should_stop;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">bool</span> <span class="title">thread_pool::should_stop</span><span class="params">(<span class="type">void</span>)</span> <span class="type">const</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">return</span> m_should_stop || m_nb_running_threads &gt; m_max_nb_threads;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function">std::pair&lt;<span class="type">bool</span>, thread_pool::<span class="type">task_t</span>&gt; <span class="title">thread_pool::fetch_task_or_stop</span><span class="params">(<span class="type">void</span>)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  	<span class="function">std::unique_lock&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(m_tasks_mtx)</span></span>;</span><br><span class="line"> 	std::cout &lt;&lt; <span class="string">&quot;waiting to fetch task&quot;</span>;</span><br><span class="line">    <span class="comment">//等待唤醒，并且 有任务增加或线程停止</span></span><br><span class="line">  	m_tasks_condvar.<span class="built_in">wait</span>(lock, [&amp;] &#123; <span class="keyword">return</span> <span class="built_in">should_stop</span>() || !m_tasks.<span class="built_in">empty</span>(); &#125;);</span><br><span class="line">  	<span class="keyword">if</span> (<span class="built_in">should_stop</span>())</span><br><span class="line">    &#123;</span><br><span class="line">    	--m_nb_running_threads;</span><br><span class="line">    	<span class="keyword">return</span> &#123;<span class="literal">true</span>, <span class="literal">nullptr</span>&#125;;</span><br><span class="line">  	&#125;</span><br><span class="line"></span><br><span class="line">  <span class="type">task_t</span> task = std::<span class="built_in">move</span>(m_tasks.<span class="built_in">front</span>());</span><br><span class="line">  m_tasks.<span class="built_in">pop</span>();</span><br><span class="line">  <span class="keyword">return</span> &#123;<span class="literal">false</span>, task&#125;;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//在这里并没有定义队列的大小，如果有需求再增加</span></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">thread_pool::add_task</span><span class="params">(<span class="type">const</span> <span class="type">task_t</span>&amp; task)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="function">std::lock_guard&lt;std::mutex&gt; <span class="title">lock</span><span class="params">(m_tasks_mtx)</span></span>;</span><br><span class="line"> 	std::cout &lt;&lt; <span class="string">&quot;add task to thread_pool&quot;</span>;</span><br><span class="line">    <span class="comment">//添加任务到消息队列中</span></span><br><span class="line">  	m_tasks.<span class="built_in">push</span>(task);</span><br><span class="line">    <span class="comment">//唤醒等待获取任务的线程进行工作</span></span><br><span class="line">  	m_tasks_condvar.<span class="built_in">notify_one</span>();</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">//同上</span></span><br><span class="line">thread_pool&amp; thread_pool::<span class="keyword">operator</span>&lt;&lt;(<span class="type">const</span> <span class="type">task_t</span>&amp; task) &#123;</span><br><span class="line">  <span class="built_in">add_task</span>(task);</span><br><span class="line">  <span class="keyword">return</span> *<span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">void</span> <span class="title">thread_pool::set_nb_threads</span><span class="params">(std::<span class="type">size_t</span> nb_threads)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  m_max_nb_threads = nb_threads;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//如果正在运行的线程数小于最大线程数量，则创建线程，并设置启动函数run,将线程添加到线程列表中管理</span></span><br><span class="line">  <span class="keyword">while</span> (m_nb_running_threads &lt; m_max_nb_threads) &#123;</span><br><span class="line">	  ++m_nb_running_threads;</span><br><span class="line">	  m_workers.<span class="built_in">push_back</span>(std::<span class="built_in">thread</span>(std::<span class="built_in">bind</span>(&amp;thread_pool::run, <span class="keyword">this</span>)));</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">//如果大于最大线程数量，则唤醒线程使其停止</span></span><br><span class="line">  <span class="keyword">if</span> (m_nb_running_threads &gt; m_max_nb_threads) &#123;</span><br><span class="line">	  m_tasks_condvar.<span class="built_in">notify_all</span>();</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>dc</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2019/05/15/c-11%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E6%B1%A0/">http://example.com/2019/05/15/c-11%E5%AE%9E%E7%8E%B0%E7%BA%BF%E7%A8%8B%E6%B1%A0/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/C/"># C++</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2019/06/15/QT%E6%BA%90%E7%A0%81%E4%B8%ADd%E6%8C%87%E9%92%88%E3%80%81d-func/">QT源码中d指针、d_func</a>
+            
+            
+            <a class="next" rel="next" href="/2019/04/01/async%E6%96%B9%E6%B3%95%E4%BD%BF%E7%94%A8/">async方法使用</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© dc | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
