@@ -28,7 +28,7 @@
 <meta property="og:description" content="线程池一般而言,线程池有以下几个部分: 完成主要任务的一个或多个线程。用于调度管理的管理线程。要求执行的任务队列。简单来说就是线程过多会带来调度开销，进而影响缓存局部性和整体性能，而线程池维护着多个线程，等待管理者分配并发这姓的任务，从而避免了在处理短时间任务时创建与销毁线程的代价，线程池不仅能保证内核的充分利用，还能防止过分调度。可用线程数量应该取决于可用的并发处理器、处理器内核、内存、网络等的">
 <meta property="og:locale">
 <meta property="article:published_time" content="2019-05-15T09:04:33.000Z">
-<meta property="article:modified_time" content="2022-11-15T09:08:44.000Z">
+<meta property="article:modified_time" content="2022-11-15T12:38:35.968Z">
 <meta property="article:author" content="dc">
 <meta property="article:tag" content="C++">
 <meta name="twitter:card" content="summary">
@@ -182,7 +182,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-15 17:08:44" itemprop="dateModified" datetime="2022-11-15T17:08:44+08:00">2022-11-15</time>
+                <time title="Modified: 2022-11-15 20:38:35" itemprop="dateModified" datetime="2022-11-15T20:38:35+08:00">2022-11-15</time>
               </span>
 
           
@@ -198,6 +198,7 @@
       
         <h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p>一般而言,线程池有以下几个部分:</p>
 <p>完成主要任务的一个或多个线程。<br>用于调度管理的管理线程。<br>要求执行的任务队列。<br>简单来说就是线程过多会带来调度开销，进而影响缓存局部性和整体性能，而线程池维护着多个线程，等待管理者分配并发这姓的任务，从而避免了在处理短时间任务时创建与销毁线程的代价，线程池不仅能保证内核的充分利用，还能防止过分调度。可用线程数量应该取决于可用的并发处理器、处理器内核、内存、网络等的数量</p>
+<span id="more"></span>
 <h1 id="线程池的组成"><a href="#线程池的组成" class="headerlink" title="线程池的组成"></a>线程池的组成</h1><p>创建一定数量的线程，启动线程，调配任务，管理着线程池</p>
 <p>代码中主要使用功能</p>
 <p>在构造创建创建一定数量的线程池,进行线程循环<br>stop(void)停止所有线程循环，回收所有资源<br>add_task()和 &lt;&lt; 添加一个任务，添加任务的时候可以使用lambda表达式</p>
