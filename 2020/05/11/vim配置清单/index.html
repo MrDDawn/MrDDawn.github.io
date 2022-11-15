@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+
+<head>
+    <meta charset="UTF-8">
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+    <meta name="author" content="dc">
+
+
+    <meta name="subtitle" content="螺蛳粉">
+
+
+
+
+<title>vim配置清单 | 午饭吃啥</title>
+
+
+
+    <link rel="icon" href="/favicon.ico">
+
+
+
+
+    <!-- stylesheets list from _config.yml -->
+    
+    <link rel="stylesheet" href="/css/style.css">
+    
+
+
+
+    <!-- scripts list from _config.yml -->
+    
+    <script src="/js/script.js"></script>
+    
+    <script src="/js/tocbot.min.js"></script>
+    
+
+
+
+    
+    
+        
+    
+
+
+<meta name="generator" content="Hexo 6.3.0"></head>
+
+<body>
+    <script>
+        // this function is used to check current theme before page loaded.
+        (() => {
+            const currentTheme = window.localStorage && window.localStorage.getItem('theme') || '';
+            const isDark = currentTheme === 'dark';
+            const pagebody = document.getElementsByTagName('body')[0]
+            if (isDark) {
+                pagebody.classList.add('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Dark"
+            } else {
+                pagebody.classList.remove('dark-theme');
+                // mobile
+                document.getElementById("mobile-toggle-theme").innerText = "· Light"
+            }
+        })();
+    </script>
+
+    <div class="wrapper">
+        <header>
+    <nav class="navbar">
+        <div class="container">
+            <div class="navbar-header header-logo"><a href="/">午饭吃啥</a></div>
+            <div class="menu navbar-right">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+                <input id="switch_default" type="checkbox" class="switch_default">
+                <label for="switch_default" class="toggleBtn"></label>
+            </div>
+        </div>
+    </nav>
+
+    
+    <nav class="navbar-mobile" id="nav-mobile">
+        <div class="container">
+            <div class="navbar-header">
+                <div>
+                    <a href="/">午饭吃啥</a><a id="mobile-toggle-theme">·&nbsp;Light</a>
+                </div>
+                <div class="menu-toggle" onclick="mobileBtn()">&#9776; Menu</div>
+            </div>
+            <div class="menu" id="mobile-menu">
+                
+                    <a class="menu-item" href="/archives">Posts</a>
+                
+                    <a class="menu-item" href="/category">Categories</a>
+                
+                    <a class="menu-item" href="/tag">Tags</a>
+                
+                    <a class="menu-item" href="/about">About</a>
+                
+            </div>
+        </div>
+    </nav>
+
+</header>
+<script>
+    var mobileBtn = function f() {
+        var toggleMenu = document.getElementsByClassName("menu-toggle")[0];
+        var mobileMenu = document.getElementById("mobile-menu");
+        if(toggleMenu.classList.contains("active")){
+           toggleMenu.classList.remove("active")
+            mobileMenu.classList.remove("active")
+        }else{
+            toggleMenu.classList.add("active")
+            mobileMenu.classList.add("active")
+        }
+    }
+</script>
+            <div class="main">
+                <div class="container">
+    
+    
+
+    
+    <article class="post-wrap">
+        <header class="post-header">
+            <h1 class="post-title">vim配置清单</h1>
+            
+                <div class="post-meta">
+                    
+                        Author: <a itemprop="author" rel="author" href="/">dc</a>
+                    
+
+                    
+                        <span class="post-time">
+                        Date: <a href="#">May 11, 2020&nbsp;&nbsp;18:06:53</a>
+                        </span>
+                    
+                    
+                </div>
+            
+        </header>
+
+        <div class="post-content">
+            <p>记录自己使用的vim插件 .vimrc文件<br>拷贝代码粘贴到$HOME&#x2F;.vimrc 即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line">&quot; 将先导键重新映射为逗号</span><br><span class="line">let mapleader = &quot;\&lt;space&gt;&quot; &quot;建议将先导键映射为空格</span><br><span class="line">syntax on                 &quot; 支持语法高亮显示</span><br><span class="line">filetype plugin indent on &quot; 启用根据文件类型自动缩进</span><br><span class="line">set autoindent            &quot; 开始新行时处理缩进</span><br><span class="line">set expandtab             &quot; 将制表符Tab展开为空格，这对于Python尤其有用</span><br><span class="line">set tabstop=4             &quot; 要计算的空格数</span><br><span class="line">set shiftwidth=4          &quot; 用于自动缩进的空格数</span><br><span class="line">set backspace=2           &quot; 在多数终端上修正退格键Backspace的行为</span><br><span class="line">set hlsearch              &quot; 设置搜索高亮</span><br><span class="line">set incsearch             &quot; 设置动态跳转</span><br><span class="line">colorscheme murphy        &quot; 修改配色</span><br><span class="line">packloadall               &quot; 加载所有插件</span><br><span class="line">silent! helptags ALL      &quot; 为所有插件加载帮助文档</span><br><span class="line">set ignorecase            &quot; 搜索忽略大小写</span><br><span class="line">set tags=tags; &quot; 在父目录中递归查找tags文件 可以在代码文件中执行ctags -R 来生常tags文件</span><br><span class="line">let NERDTreeShowBookmarks = 1 &quot; 启动NERDTree时显示书签</span><br><span class="line">let NERDTreeHijackNetrw = 0</span><br><span class="line">autocmd VimEnter * NERDTree   &quot; Vim启动时打开NERDTree</span><br><span class="line">&quot; 当NERDTree窗口是最后一个窗口时自动关闭</span><br><span class="line">autocmd bufenter * if (winnr(&quot;$&quot;) == 1 &amp;&amp; exists(&quot;b:NERDTree&quot;) &amp;&amp;</span><br><span class="line">  \ b:NERDTree.isTabTree()) | q | endif</span><br><span class="line"></span><br><span class="line">&quot; 设置NERDTREE</span><br><span class="line">map &lt;F3&gt; :NERDTreeMirror&lt;CR&gt;</span><br><span class="line">map &lt;F3&gt; :NERDTreeToggle&lt;CR&gt;</span><br><span class="line">&quot; 使用&lt;Ctrl&gt;+hjkl快速在窗口间跳转</span><br><span class="line">&quot; noremap 用于非递归映射</span><br><span class="line">&quot; map 用于递归映射</span><br><span class="line">noremap &lt;c-h&gt; &lt;c-w&gt;&lt;c-h&gt;</span><br><span class="line">noremap &lt;c-j&gt; &lt;c-w&gt;&lt;c-j&gt;</span><br><span class="line">noremap &lt;c-k&gt; &lt;c-w&gt;&lt;c-k&gt;</span><br><span class="line">noremap &lt;c-l&gt; &lt;c-w&gt;&lt;c-l&gt;</span><br><span class="line">&quot; 禁止箭头键功能，使自己习惯hjkl风格</span><br><span class="line">map &lt;up&gt; &lt;nop&gt;</span><br><span class="line">map &lt;down&gt; &lt;nop&gt;</span><br><span class="line">map &lt;left&gt; &lt;nop&gt;</span><br><span class="line">map &lt;right&gt; &lt;nop&gt;</span><br><span class="line"></span><br><span class="line">&quot; 在插入模式下加入一对引号或括号</span><br><span class="line">inoremap &#x27; &#x27;&#x27;&lt;esc&gt;i</span><br><span class="line">inoremap &quot; &quot;&quot;&lt;esc&gt;i</span><br><span class="line">inoremap ( ()&lt;esc&gt;i</span><br><span class="line">inoremap &#123; &#123;&#125;&lt;esc&gt;i</span><br><span class="line">inoremap [ []&lt;esc&gt;i</span><br><span class="line"></span><br><span class="line">&quot; 如果没安装过vim-plug，则下载安装</span><br><span class="line">if empty(glob(&#x27;~/.vim/autoload/plug.vim&#x27;))</span><br><span class="line">  silent !curl -fLo ~/.vim/autoload/plug.vim --create-dirs</span><br><span class="line">     \https://raw.GitHub.com/junegunn/vim-plug/master/plug.vim</span><br><span class="line">  autocmd VimEnter * PlugInstall --sync | source $MYVIMRC</span><br><span class="line">endif</span><br><span class="line"></span><br><span class="line">&quot; 使用vim-plug管理插件</span><br><span class="line">call plug#begin()</span><br><span class="line">Plug &#x27;scrooloose/nerdtree&#x27;, &#123; &#x27;on&#x27;: &#x27;NERDTreeToggle&#x27; &#125;</span><br><span class="line">Plug &#x27;tpope/vim-vinegar&#x27;</span><br><span class="line">Plug &#x27;ctrlpvim/ctrlp.vim&#x27;</span><br><span class="line">Plug &#x27;mileszs/ack.vim&#x27;</span><br><span class="line">Plug &#x27;easymotion/vim-easymotion&#x27;</span><br><span class="line">Plug &#x27;junegunn/goyo.vim&#x27;, &#123; &#x27;for&#x27;: &#x27;markdown&#x27; &#125; &quot; 只对markdown文件加载</span><br><span class="line">Plug &#x27;junegunn/vim-plug&#x27;</span><br><span class="line">let g:plug_timeout = 300 &quot; 为YouCompleteMe增加vim-plug的超时时间</span><br><span class="line">Plug &#x27;Valloric/YouCompleteMe&#x27;, &#123; &#x27;do&#x27;: &#x27;./install.sh --clangd-completer&#x27; &#125; &quot;自动补全功能</span><br><span class="line">Plug &#x27;sjl/gundo.vim&#x27;</span><br><span class="line">Plug &#x27;tpope/vim-fugitive&#x27;</span><br><span class="line">Plug &#x27;vim-scripts/taglist.vim&#x27; &quot; taglist插件</span><br><span class="line">Plug &#x27;tacahiroy/ctrlp-funky&#x27; &quot; ctrlp funky 模糊搜索当前文件中所有函数</span><br><span class="line"></span><br><span class="line">call plug#end()</span><br><span class="line"></span><br><span class="line">autocmd BufWritePost *.cpp *.h *.c silent! !ctags -R &amp; &quot; 自动更新标签 如果保存了c++/c文件后</span><br><span class="line"></span><br><span class="line">&quot; 设置 tagslist</span><br><span class="line">let Tlist_Use_Right_Window = 1 &quot; 让taglist窗口出现在Vim的右边</span><br><span class="line">let Tlist_File_Fold_Auto_Close = 1 &quot; 当同时显示多个文件中的tag时，设置为1，可使taglist只显示当前文件tag，其它文件的tag都被折叠起来。</span><br><span class="line">let Tlist_Show_One_File = 1 &quot; 只显示一个文件中的tag，默认为显示多个</span><br><span class="line">let Tlist_Sort_Type =&#x27;name&#x27; &quot; Tag的排序规则，以名字排序。默认是以在文件中出现的顺序排序</span><br><span class="line">let Tlist_GainFocus_On_ToggleOpen = 1  &quot;Taglist窗口打开时，立刻切换为有焦点状态</span><br><span class="line">let Tlist_Exit_OnlyWindow = 1 &quot; 如果taglist窗口是最后一个窗口，则退出vim</span><br><span class="line">let Tlist_WinWidth = 45 &quot; 设置窗体宽度为32，可以根据自己喜好设置</span><br><span class="line">map t :TlistToggle&lt;CR&gt; &quot;热键设置</span><br><span class="line"></span><br><span class="line">&quot; cscope</span><br><span class="line">&quot; cs add /home/dc/workspace/wp_qt5/cscope.out</span><br><span class="line">&quot; map &lt;C-\&gt;g :cs find g &lt;C-R&gt;=expand(&quot;&lt;cword&gt;&quot;)&lt;CR&gt;&lt;CR&gt;</span><br><span class="line"></span><br><span class="line">&quot; Funky</span><br><span class="line">nnoremap &lt;Leader&gt;fu :CtrlPFunky&lt;Cr&gt;</span><br><span class="line">&quot; narrow the list down with a word under cursor</span><br><span class="line">nnoremap &lt;Leader&gt;uu :execute &#x27;CtrlPFunky &#x27; . expand(&#x27;&lt;cword&gt;&#x27;)&lt;Cr&gt;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        
+            <section class="post-copyright">
+                
+                    <p class="copyright-item">
+                        <span>Author:</span>
+                        <span>dc</span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>Permalink:</span>
+                        <span><a href="http://example.com/2020/05/11/vim%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%95/">http://example.com/2020/05/11/vim%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%95/</a></span>
+                    </p>
+                
+                
+                    <p class="copyright-item">
+                        <span>License:</span>
+                        <span>Copyright (c) 2019 <a target="_blank" rel="noopener" href="http://creativecommons.org/licenses/by-nc/4.0/">CC-BY-NC-4.0</a> LICENSE</span>
+                    </p>
+                
+                
+                     <p class="copyright-item">
+                         <span>Slogan:</span>
+                         <span>Do you believe in <strong>DESTINY</strong>?</span>
+                     </p>
+                
+
+            </section>
+        
+        <section class="post-tags">
+            <div>
+                <span>Tag(s):</span>
+                <span class="tag">
+                    
+                    
+                        <a href="/tags/vim/"># vim</a>
+                    
+                        
+                </span>
+            </div>
+            <div>
+                <a href="javascript:window.history.back();">back</a>
+                <span>· </span>
+                <a href="/">home</a>
+            </div>
+        </section>
+        <section class="post-nav">
+            
+                <a class="prev" rel="prev" href="/2020/08/15/docker%E5%91%BD%E4%BB%A4%E7%AC%94%E8%AE%B0/">docker命令笔记</a>
+            
+            
+            <a class="next" rel="next" href="/2019/08/23/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/">智能指针</a>
+            
+        </section>
+
+
+    </article>
+</div>
+
+            </div>
+            <footer id="footer" class="footer">
+    <div class="copyright">
+        <span>© dc | Powered by <a href="https://hexo.io" target="_blank">Hexo</a> & <a href="https://github.com/Siricee/hexo-theme-Chic" target="_blank">Chic</a></span>
+    </div>
+</footer>
+
+    </div>
+</body>
+
+</html>
