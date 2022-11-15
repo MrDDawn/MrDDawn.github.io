@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Muse","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="sed是Linux下一款功能强大的非交互流式文本编辑器，可以对文本文件进行增、删、改、查等操作，支持按行、按字段、按正则匹配文本内容，灵活方便，特别适合于大文件的编辑。sed全称是：Stream EDitorsed在处理文本时是逐行读取文件内容，读到匹配的行就根据指令做操作，不匹配就跳过。 sed基础命令使用sed ‘s&#x2F;e&#x2F;E&#x2F;2p’ test.txt仅显示被替换的">
+  <meta name="description" content="sed是Linux下一款功能强大的非交互流式文本编辑器，可以对文本文件进行增、删、改、查等操作，支持按行、按字段、按正则匹配文本内容，灵活方便，特别适合于大文件的编辑。sed全称是：Stream EDitorsed在处理文本时是逐行读取文件内容，读到匹配的行就根据指令做操作，不匹配就跳过。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="sed">
 <meta property="og:url" content="http://example.com/2020/10/05/sed/index.html">
 <meta property="og:site_name" content="午饭吃啥">
-<meta property="og:description" content="sed是Linux下一款功能强大的非交互流式文本编辑器，可以对文本文件进行增、删、改、查等操作，支持按行、按字段、按正则匹配文本内容，灵活方便，特别适合于大文件的编辑。sed全称是：Stream EDitorsed在处理文本时是逐行读取文件内容，读到匹配的行就根据指令做操作，不匹配就跳过。 sed基础命令使用sed ‘s&#x2F;e&#x2F;E&#x2F;2p’ test.txt仅显示被替换的">
+<meta property="og:description" content="sed是Linux下一款功能强大的非交互流式文本编辑器，可以对文本文件进行增、删、改、查等操作，支持按行、按字段、按正则匹配文本内容，灵活方便，特别适合于大文件的编辑。sed全称是：Stream EDitorsed在处理文本时是逐行读取文件内容，读到匹配的行就根据指令做操作，不匹配就跳过。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2020-10-05T00:44:37.000Z">
-<meta property="article:modified_time" content="2022-11-15T10:17:08.000Z">
+<meta property="article:modified_time" content="2022-11-15T12:36:16.027Z">
 <meta property="article:author" content="dc">
 <meta property="article:tag" content="shell">
 <meta name="twitter:card" content="summary">
@@ -182,7 +182,7 @@
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-15 18:17:08" itemprop="dateModified" datetime="2022-11-15T18:17:08+08:00">2022-11-15</time>
+                <time title="Modified: 2022-11-15 20:36:16" itemprop="dateModified" datetime="2022-11-15T20:36:16+08:00">2022-11-15</time>
               </span>
 
           
@@ -197,6 +197,8 @@
 
       
         <p>sed是Linux下一款功能强大的非交互流式文本编辑器，可以对文本文件进行增、删、改、查等操作，支持按行、按字段、按正则匹配文本内容，灵活方便，特别适合于大文件的编辑。<br>sed全称是：Stream EDitor<br>sed在处理文本时是逐行读取文件内容，读到匹配的行就根据指令做操作，不匹配就跳过。</p>
+<span id="more"></span>
+
 <h1 id="sed基础命令使用"><a href="#sed基础命令使用" class="headerlink" title="sed基础命令使用"></a>sed基础命令使用</h1><p>sed ‘s&#x2F;e&#x2F;E&#x2F;2p’ test.txt<br>仅显示被替换的数据行<br>在s替换指令的最后添加i标记可以忽略大小写</p>
 <p>sed ‘s&#x2F;jacob&#x2F;vicky&#x2F;i’ test.txt<br>使用s替换指令时如果同时添加了e标记，则表示将替换后的内容当成Shell命令在终端执行一次</p>
 <p>echo ‘&#x2F;etc&#x2F;hosts’ | sed ‘s&#x2F;^&#x2F;ls -l &#x2F;e’<br>将字符串头替换ls -l 并执行命令,将&#x2F;etc&#x2F;hosts替换成ls -l &#x2F;etc&#x2F;hosts .替换后执行该命令</p>
