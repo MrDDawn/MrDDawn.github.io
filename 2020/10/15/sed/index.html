@@ -15,7 +15,7 @@
 
 
 
-<title>docker命令笔记 | 午饭吃啥</title>
+<title>sed | 午饭吃啥</title>
 
 
 
@@ -198,7 +198,7 @@
     
     <article class="post-wrap">
         <header class="post-header">
-            <h1 class="post-title">docker命令笔记</h1>
+            <h1 class="post-title">sed</h1>
             
                 <div class="post-meta">
                     
@@ -207,7 +207,7 @@
 
                     
                         <span class="post-time">
-                        Date: <a href="#">August 15, 2020&nbsp;&nbsp;17:38:57</a>
+                        Date: <a href="#">October 15, 2020&nbsp;&nbsp;8:44:37</a>
                         </span>
                     
                     
@@ -216,29 +216,26 @@
         </header>
 
         <div class="post-content">
-            <p>记录一些Docker命令</p>
-<h1 id="docker-命令行中it的意思"><a href="#docker-命令行中it的意思" class="headerlink" title="docker 命令行中it的意思"></a>docker 命令行中it的意思</h1><p>-i：以交互模式运行容器，通常与-t同时使用<br>-d：后台运行容器，并返回容器ID，也即启动守护式容器<br>-t：为容器重新分配一个伪输入终端，通常与-i同时使用</p>
-<h1 id="docker-p-111-111"><a href="#docker-p-111-111" class="headerlink" title="docker -p 111:111"></a>docker -p 111:111</h1><p>把dockertcp111端口映射到宿主机的111端口</p>
-<h1 id="docker-p-192-168-1-100-8080-80"><a href="#docker-p-192-168-1-100-8080-80" class="headerlink" title="docker -p 192.168.1.100:8080:80"></a>docker -p 192.168.1.100:8080:80</h1><p>将容器的TCP80端口映射到IP地址为192.168.1.100宿主机的8080端口</p>
-<h1 id="docker-p-8080-80-x2F-tcp-p-8080-80-x2F-udp"><a href="#docker-p-8080-80-x2F-tcp-p-8080-80-x2F-udp" class="headerlink" title="docker -p 8080:80&#x2F;tcp -p 8080:80&#x2F;udp"></a>docker -p 8080:80&#x2F;tcp -p 8080:80&#x2F;udp</h1><p>同时映射TCP和UDP端口</p>
-<h1 id="docker-exec-it-‘id’-bash"><a href="#docker-exec-it-‘id’-bash" class="headerlink" title="docker exec -it ‘id’ bash"></a>docker exec -it ‘id’ bash</h1><p>在容器id中以交互模式启动一个终端</p>
-<h1 id="docker-ps-a"><a href="#docker-ps-a" class="headerlink" title="docker ps -a"></a>docker ps -a</h1><p>查看所有的容器</p>
-<h1 id="docker-pull-ubuntu"><a href="#docker-pull-ubuntu" class="headerlink" title="docker pull ubuntu"></a>docker pull ubuntu</h1><p>下载ubuntu镜像</p>
-<h1 id="docker-run-it-ubuntu-x2F-bin-x2F-bash"><a href="#docker-run-it-ubuntu-x2F-bin-x2F-bash" class="headerlink" title="docker run -it ubuntu &#x2F;bin&#x2F;bash"></a>docker run -it ubuntu &#x2F;bin&#x2F;bash</h1><p>启动ubuntu镜像，参数为以命令行模式进入镜像<br>&#x2F;bin&#x2F;bash 放在镜像后面的是命令，因为用的是交互式shell,所以用的是&#x2F;bin&#x2F;bash</p>
-<h1 id="docker-start-container"><a href="#docker-start-container" class="headerlink" title="docker start container"></a>docker start container</h1><p>启动一个已停止的容器</p>
-<h1 id="docker-stop-container"><a href="#docker-stop-container" class="headerlink" title="docker stop container"></a>docker stop container</h1><p>停止正在运行的容器</p>
-<h1 id="restart"><a href="#restart" class="headerlink" title="restart"></a>restart</h1><p>重启</p>
-<h1 id="进入容器"><a href="#进入容器" class="headerlink" title="进入容器"></a>进入容器</h1><p>在使用 -d 参数时，容器启动后会进入后台。此时想要进入容器，可以通过以下指令进入：<br>docker attach container &#x2F;&#x2F;注意： 如果从这个容器退出，会导致容器的停止。<br>docker exec：推荐使用 docker exec 命令，因为此命令会退出容器终端，但不会导致容器的停止。</p>
-<h1 id="导出容器"><a href="#导出容器" class="headerlink" title="导出容器"></a>导出容器</h1><p>docker  export ubuntu &gt; ubuntu.rar</p>
-<h1 id="导入容器快照"><a href="#导入容器快照" class="headerlink" title="导入容器快照"></a>导入容器快照</h1><p>docker import &#x2F;&#x2F;后面可以使url</p>
-<h1 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h1><p>docker rm -f container</p>
-<h1 id="清理掉所有处于终止状态的容器。"><a href="#清理掉所有处于终止状态的容器。" class="headerlink" title="清理掉所有处于终止状态的容器。"></a>清理掉所有处于终止状态的容器。</h1><p>docker container prune</p>
-<h1 id="docker-pull-training-x2F-webapp"><a href="#docker-pull-training-x2F-webapp" class="headerlink" title="docker pull training&#x2F;webapp"></a>docker pull training&#x2F;webapp</h1><p>载入镜像</p>
-<h1 id="docker-run-d-P-training-x2F-webapp-python-app-py"><a href="#docker-run-d-P-training-x2F-webapp-python-app-py" class="headerlink" title="docker run -d -P training&#x2F;webapp python app.py"></a>docker run -d -P training&#x2F;webapp python app.py</h1><p>-d:让容器在后台运行。<br>-P:将容器内部使用的网络端口随机映射到我们使用的主机上</p>
-<h1 id="docker-port"><a href="#docker-port" class="headerlink" title="docker port"></a>docker port</h1><p>可以查看指定 （ID 或者名字）容器的某个确定端口映射到宿主机的端口号。</p>
-<h1 id="导入docker镜像名字为oadocker"><a href="#导入docker镜像名字为oadocker" class="headerlink" title="导入docker镜像名字为oadocker"></a>导入docker镜像名字为oadocker</h1><p>wget -q –show-progress    <a target="_blank" rel="noopener" href="https://wufanchisha.cn/oadocker.rar">https://wufanchisha.cn/oadocker.rar</a><br>docker import oadocker.rar  oadocker<br>rm oadocker.rar<br>docker run -it -p 3888:3888 oadocker &#x2F;bin&#x2F;bash &#x2F;root&#x2F;runnode.sh 1</p>
-<h1 id="docker-–privileged-x3D-true"><a href="#docker-–privileged-x3D-true" class="headerlink" title="docker –privileged&#x3D;true"></a>docker –privileged&#x3D;true</h1><p>使用该参数，container内的root拥有真正的root权限。<br>否则，container内的root只是外部的一个普通用户权限。<br>privileged启动的容器，可以看到很多host上的设备，并且可以执行mount。<br>甚至允许你在docker容器中启动docker容器。</p>
-<h1 id="docker-–cap-add"><a href="#docker-–cap-add" class="headerlink" title="docker –cap-add"></a>docker –cap-add</h1><p>添加权限<br>属于细粒度权限</p>
+            <p>sed是Linux下一款功能强大的非交互流式文本编辑器，可以对文本文件进行增、删、改、查等操作，支持按行、按字段、按正则匹配文本内容，灵活方便，特别适合于大文件的编辑。<br>sed全称是：Stream EDitor<br>sed在处理文本时是逐行读取文件内容，读到匹配的行就根据指令做操作，不匹配就跳过。</p>
+<h1 id="sed基础命令使用"><a href="#sed基础命令使用" class="headerlink" title="sed基础命令使用"></a>sed基础命令使用</h1><p>sed ‘s&#x2F;e&#x2F;E&#x2F;2p’ test.txt<br>仅显示被替换的数据行<br>在s替换指令的最后添加i标记可以忽略大小写</p>
+<p>sed ‘s&#x2F;jacob&#x2F;vicky&#x2F;i’ test.txt<br>使用s替换指令时如果同时添加了e标记，则表示将替换后的内容当成Shell命令在终端执行一次</p>
+<p>echo ‘&#x2F;etc&#x2F;hosts’ | sed ‘s&#x2F;^&#x2F;ls -l &#x2F;e’<br>将字符串头替换ls -l 并执行命令,将&#x2F;etc&#x2F;hosts替换成ls -l &#x2F;etc&#x2F;hosts .替换后执行该命令</p>
+<p>echo “tmpfile” | sed ‘s#^#touch &#x2F;tmp&#x2F;#e’<br>将tmpfile替换为touch &#x2F;tmp&#x2F;tmpfile，替换后在命令终端执行该命令，最后使用ls &#x2F;tmp&#x2F;tmpfile查看系统中是否已经创建了该文件。</p>
+<p>sed ‘s&#x2F;the&#x2F;&#x2F;‘ test.txt<br>将the替换为空，即删除</p>
+<p>echo ‘“hello” “world”‘ | sed ‘s&#x2F;&quot;. * \ “&#x2F;&#x2F;‘<br>匹配双引号中的所有数据，并将其删除</p>
+<p>echo ‘“hello” “world”‘ | sed ‘s&#x2F;&quot;[^&quot;] * &quot;&#x2F;&#x2F;‘<br>在匹配由一个引号开始，中间是不包含引号的任意其他字符（长度任意），最后是一个双引号结束的数据，这样当一行数据中包含多个引号数据时，就可以仅仅匹配第一个双引号的数据。</p>
+<p>sed -r ‘s&#x2F;^(.) (.*) (.) $&#x2F;\3\2\1&#x2F;‘ test.txt<br>将每行首尾字符对调<br>上面这条命令应用了正则表达式中的保留功能，使用圆括号将匹配的数据保留，在后面通过\n调用前面保留的数据。这里在第一个圆括号中保留的是每行开头的第一个字符（．在正则中表示任意单个字符），在第三个圆括号中保留的是每行结束的最后一个字符，而在中间第二个圆括号中保留的是除首尾字符外中间的所有字符（.*在正则中表示任意长度的任意字符）。因为都是使用任意字符进行匹配，所以这三个括号可以匹配所有行的数据，并在后面将匹配的数据顺序进行重新调整再输出，将第三个括号的数据（\3）先输出，再输出第二个括号中的数据（\2），最后输出的是第一个括号中的数据（\1）。</p>
+<p>sed ‘s&#x2F;/sbin/nologin&#x2F;/bin/sh&#x2F;‘ &#x2F;tmp&#x2F;passwd<br>将&#x2F;sbin&#x2F;nologin 替换成 &#x2F;bin&#x2F;sh   &#x2F;需要使用转义<br>sed ‘s#&#x2F;sbin&#x2F;nologin#&#x2F;bin&#x2F;sh#’ &#x2F;tmp&#x2F;passwd<br> #号作为替换符<br>sed ‘s, &#x2F;sbin&#x2F;nologin, &#x2F;bin&#x2F;sh, ‘ &#x2F;tmp&#x2F;passwd<br> ,号作为替换符</p>
+<p>使用sed时可以使用分号或者-e选项两种方式在一行中编写多条指令。可以直接使用分号将多个指令分隔，或者在多个-e参数后面添加sed指令，sed支持一个或多个-e参数。如果将分号放到花括号中还可以实现对指令进行分组。</p>
+<p>sed -n ‘1p;3p;5p’ test.txt<br>显示第1,3,5行</p>
+<p>sed -n -e ‘1p’ -e ‘3p’ test.txt<br>显示第1,3行</p>
+<p>sed ‘2h;5g’ test.txt<br>在读取文件的第2行时将整行数据复制到了保留空间，并将保留空间中原有的回车符覆盖了，然后在读取第5行数据时，使用保留空间中的数据覆盖掉模式空间中的数据</p>
+<p>sed ‘2h;5G’ test.txt<br>使用的是大写字母G，是将保留空间中的数据追加到第5行的后<br>sed的正常流程是先读取数据行放入模式空间，然后匹配条件执行sed指令，如果有多个指令，则只有最后一个指令被执行后才会输出模式空间的内容，接着读取文件的下一行内容，依此类推，直到文件读取结束时退出sed程序。但是如果使用n（next）指令，则会改变这样的正常流程，sed遇到n指令会立刻输出当前模式空间中的内容，直接读取输入文件的下一行数据到模式空间。<br>因为没有匹配条件因此指令对所有数据行都有效，先是读取test.txt的第一行到模式空间，然后执行n会导致打印当前行的数据内容（显示第一行hello the world），接着读取文件下一行数据到模式空间（go spurs go），此时再执行d就会将刚刚读取进来的数据删除（删除go spurs go这行），最后当n和d指令都执行完毕了，接着sed继续读取文件下一行数据（读取第3行进入模式空间），依此类推，最终输出的效果就是将偶数行全部删除，屏幕仅显示奇数行的内容。</p>
+<p>sed ‘n; d’ test.txt<br>删除偶数行</p>
+<p>sed -n ‘2{N; l}’ test.txt<br>当读取test.txt文件的第2行到模式空间后，先使用N读取下一行（第3行）追加到模式空间现有数据的后面，此时模式空间中就有了两行数据，使用l指令可以显示当前模式空间中的数据，并且与p指令不同，使用l指令可以打印出那些不可显示的控制字符，如换行符（\n）或回车符（$）之类的内容。如果使用的是p指令，则不会显示控制字符，而是将控制字符转换为实际的换行和回车符</p>
+<p>sed -n ‘N ; s&#x2F;\n&#x2F;&#x2F;‘ test.txt<br>每两行合并为一行</p>
+<p>sed支持多种替换操作，c以行为单位替换，s以关键词为单位替换，y以字符为单位替换，单个字符是sed中的最小处理单位。</p>
+<p>sed ‘y&#x2F;hg&#x2F;HG&#x2F;‘ test.txt<br>h替换为H g替换为G<br>sed ‘y&#x2F;hg&#x2F;12’ test.txt<br>h替换为1 g替换为2<br>sed ‘y&#x2F;abcdefghijklmnopqrstuvwxy&#x2F;ABCDEFGHIJKLMNOPQRSTUVWXYZ&#x2F;‘ test.txt<br>小写替换为大写</p>
 
         </div>
 
@@ -253,7 +250,7 @@
                 
                     <p class="copyright-item">
                         <span>Permalink:</span>
-                        <span><a href="http://example.com/2020/08/15/docker%E5%91%BD%E4%BB%A4%E7%AC%94%E8%AE%B0/">http://example.com/2020/08/15/docker%E5%91%BD%E4%BB%A4%E7%AC%94%E8%AE%B0/</a></span>
+                        <span><a href="http://example.com/2020/10/15/sed/">http://example.com/2020/10/15/sed/</a></span>
                     </p>
                 
                 
@@ -277,7 +274,7 @@
                 <span class="tag">
                     
                     
-                        <a href="/tags/docker/"># docker</a>
+                        <a href="/tags/shell/"># shell</a>
                     
                         
                 </span>
@@ -290,10 +287,10 @@
         </section>
         <section class="post-nav">
             
-                <a class="prev" rel="prev" href="/2020/10/15/sed/">sed</a>
+                <a class="prev" rel="prev" href="/2020/10/28/awk/">awk</a>
             
             
-            <a class="next" rel="next" href="/2019/08/23/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/">智能指针</a>
+            <a class="next" rel="next" href="/2020/08/15/docker%E5%91%BD%E4%BB%A4%E7%AC%94%E8%AE%B0/">docker命令笔记</a>
             
         </section>
 
