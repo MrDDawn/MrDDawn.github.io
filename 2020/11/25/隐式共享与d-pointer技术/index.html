@@ -22,18 +22,18 @@
 
   <meta name="description" content="一般情况下，一个类的多个对象所占用的内存是相互独立的。如果其中某些对象数据成员的取值完全相同，我们可以令它们共享一块内存以节省空间。只有当程序需要修改其中某个对象的数据成员时，我们再为该对象分配新的内存。这种技术被称为隐式共享（implicit sharing）">
 <meta property="og:type" content="article">
-<meta property="og:title" content="async方法使用">
-<meta property="og:url" content="http://example.com/2019/08/20/%E9%9A%90%E5%BC%8F%E5%85%B1%E4%BA%AB%E4%B8%8Ed-pointer%E6%8A%80%E6%9C%AF/index.html">
+<meta property="og:title" content="隐式共享与d-pointer技术">
+<meta property="og:url" content="http://example.com/2020/11/25/%E9%9A%90%E5%BC%8F%E5%85%B1%E4%BA%AB%E4%B8%8Ed-pointer%E6%8A%80%E6%9C%AF/index.html">
 <meta property="og:site_name" content="午饭吃啥">
 <meta property="og:description" content="一般情况下，一个类的多个对象所占用的内存是相互独立的。如果其中某些对象数据成员的取值完全相同，我们可以令它们共享一块内存以节省空间。只有当程序需要修改其中某个对象的数据成员时，我们再为该对象分配新的内存。这种技术被称为隐式共享（implicit sharing）">
 <meta property="og:locale">
-<meta property="article:published_time" content="2019-08-20T04:59:38.000Z">
-<meta property="article:modified_time" content="2022-11-16T13:04:23.797Z">
+<meta property="article:published_time" content="2020-11-25T04:59:38.000Z">
+<meta property="article:modified_time" content="2022-11-16T13:07:08.959Z">
 <meta property="article:author" content="dc">
 <meta property="article:tag" content="C++&#x2F;QT">
 <meta name="twitter:card" content="summary">
 
-<link rel="canonical" href="http://example.com/2019/08/20/%E9%9A%90%E5%BC%8F%E5%85%B1%E4%BA%AB%E4%B8%8Ed-pointer%E6%8A%80%E6%9C%AF/">
+<link rel="canonical" href="http://example.com/2020/11/25/%E9%9A%90%E5%BC%8F%E5%85%B1%E4%BA%AB%E4%B8%8Ed-pointer%E6%8A%80%E6%9C%AF/">
 
 
 <script id="page-configurations">
@@ -46,7 +46,7 @@
   };
 </script>
 
-  <title>async方法使用 | 午饭吃啥</title>
+  <title>隐式共享与d-pointer技术 | 午饭吃啥</title>
   
 
 
@@ -152,7 +152,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2019/08/20/%E9%9A%90%E5%BC%8F%E5%85%B1%E4%BA%AB%E4%B8%8Ed-pointer%E6%8A%80%E6%9C%AF/">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/25/%E9%9A%90%E5%BC%8F%E5%85%B1%E4%BA%AB%E4%B8%8Ed-pointer%E6%8A%80%E6%9C%AF/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -165,7 +165,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          async方法使用
+          隐式共享与d-pointer技术
         </h1>
 
         <div class="post-meta">
@@ -175,14 +175,14 @@
               </span>
               <span class="post-meta-item-text">Posted on</span>
 
-              <time title="Created: 2019-08-20 12:59:38" itemprop="dateCreated datePublished" datetime="2019-08-20T12:59:38+08:00">2019-08-20</time>
+              <time title="Created: 2020-11-25 12:59:38" itemprop="dateCreated datePublished" datetime="2020-11-25T12:59:38+08:00">2020-11-25</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">Edited on</span>
-                <time title="Modified: 2022-11-16 21:04:23" itemprop="dateModified" datetime="2022-11-16T21:04:23+08:00">2022-11-16</time>
+                <time title="Modified: 2022-11-16 21:07:08" itemprop="dateModified" datetime="2022-11-16T21:07:08+08:00">2022-11-16</time>
               </span>
 
           
@@ -247,12 +247,12 @@ QWidget                 QWidgetPrivate
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2019/08/01/lock-guard%E5%92%8Cunique-lock%E4%BD%BF%E7%94%A8/" rel="prev" title="lock_guard和unique_lock使用">
-      <i class="fa fa-chevron-left"></i> lock_guard和unique_lock使用
+    <a href="/2020/10/28/awk/" rel="prev" title="awk">
+      <i class="fa fa-chevron-left"></i> awk
     </a></div>
       <div class="post-nav-item">
-    <a href="/2019/08/23/%E6%99%BA%E8%83%BD%E6%8C%87%E9%92%88/" rel="next" title="智能指针">
-      智能指针 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/11/28/%E4%BF%A1%E5%8F%B7%E5%92%8C%E6%A7%BD%E5%87%BD%E6%95%B0%E6%B5%85%E8%B0%88/" rel="next" title="信号和槽函数浅谈">
+      信号和槽函数浅谈 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
