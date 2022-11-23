@@ -151,6 +151,69 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/01/macos%E5%BC%80%E4%B8%A4%E4%B8%AA%E5%BE%AE%E4%BF%A1-md/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dc">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="午饭吃啥">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          
+            <a href="/2021/01/01/macos%E5%BC%80%E4%B8%A4%E4%B8%AA%E5%BE%AE%E4%BF%A1-md/" class="post-title-link" itemprop="url">macos开两个微信.md</a>
+        </h2>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-01 21:13:41" itemprop="dateCreated datePublished" datetime="2021-01-01T21:13:41+08:00">2021-01-01</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+          <h1 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h1><ul>
+<li>不安装第三方插件，不封号。</li>
+<li>双击即可启动。</li>
+<li>启动后不需要维持「终端」；事实上它会自动关闭。</li>
+</ul>
+<h1 id="解法"><a href="#解法" class="headerlink" title="解法"></a>解法</h1><p>打开终端，执行下列代码，而后在桌面双击 WeChat.command 即可</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"># 将启动命令写入桌面上的文件 WeChat.command；如果已有重名文件，请注意修改。</span><br><span class="line">echo &quot;nohup /Applications/WeChat.app/Contents/MacOS/WeChat &gt;/dev/null 2&gt;&amp;1 &amp;&quot; &gt; ~/Desktop/WeChat.command</span><br><span class="line"></span><br><span class="line"># 赋予其可执行属性</span><br><span class="line">chmod +x ~/Desktop/WeChat.command</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+      
+    </div>
+
+    
+    
+    
+      <footer class="post-footer">
+        <div class="post-eof"></div>
+      </footer>
+  </article>
+  
+  
+  
+
+      
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
     <link itemprop="mainEntityOfPage" href="http://example.com/2020/12/12/%E4%BD%BF%E7%94%A8breakpad%E6%94%B6%E9%9B%86dump/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -734,71 +797,6 @@
   
   
 
-      
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
-    <link itemprop="mainEntityOfPage" href="http://example.com/2020/05/11/vim%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%95/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.gif">
-      <meta itemprop="name" content="dc">
-      <meta itemprop="description" content="">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="午饭吃啥">
-    </span>
-      <header class="post-header">
-        <h2 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/05/11/vim%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%95/" class="post-title-link" itemprop="url">vim配置清单</a>
-        </h2>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="far fa-calendar"></i>
-              </span>
-              <span class="post-meta-item-text">Posted on</span>
-
-              <time title="Created: 2020-05-11 18:06:53" itemprop="dateCreated datePublished" datetime="2020-05-11T18:06:53+08:00">2020-05-11</time>
-            </span>
-
-          
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>记录自己使用的vim插件 .vimrc文件<br>拷贝代码粘贴到$HOME&#x2F;.vimrc 即可</p>
-          <!--noindex-->
-            <div class="post-button">
-              <a class="btn" href="/2020/05/11/vim%E9%85%8D%E7%BD%AE%E6%B8%85%E5%8D%95/#more" rel="contents">
-                Read more &raquo;
-              </a>
-            </div>
-          <!--/noindex-->
-        
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
 
   
   <nav class="pagination">
@@ -868,7 +866,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">17</span>
+          <span class="site-state-item-count">18</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
