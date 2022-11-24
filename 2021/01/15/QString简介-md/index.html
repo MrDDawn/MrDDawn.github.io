@@ -20,15 +20,15 @@
     var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
   </script>
 
-  <meta name="description" content="Qt中的QStringQString负责存储、操作Unicode编码的字符串。每个字符的类型为QChar，长度为2个字节，存放着该字符在Unicode 4.0标准中的编码。对于编码值大于65535的字符，用两个连续的QChar来表示。与标准库中的wstring类似，QString能对Unicode字符串进行拼接、查找等操作。但是，QString的功能更加强大，其中最主要的功能是能够完成Unicod">
+  <meta name="description" content="QString负责存储、操作Unicode编码的字符串。每个字符的类型为QChar，长度为2个字节，存放着该字符在Unicode 4.0标准中的编码。对于编码值大于65535的字符，用两个连续的QChar来表示。与标准库中的wstring类似，QString能对Unicode字符串进行拼接、查找等操作。但是，QString的功能更加强大，其中最主要的功能是能够完成Unicode编码方式和其他编码方">
 <meta property="og:type" content="article">
 <meta property="og:title" content="QString简介">
 <meta property="og:url" content="http://example.com/2021/01/15/QString%E7%AE%80%E4%BB%8B-md/index.html">
 <meta property="og:site_name" content="午饭吃啥">
-<meta property="og:description" content="Qt中的QStringQString负责存储、操作Unicode编码的字符串。每个字符的类型为QChar，长度为2个字节，存放着该字符在Unicode 4.0标准中的编码。对于编码值大于65535的字符，用两个连续的QChar来表示。与标准库中的wstring类似，QString能对Unicode字符串进行拼接、查找等操作。但是，QString的功能更加强大，其中最主要的功能是能够完成Unicod">
+<meta property="og:description" content="QString负责存储、操作Unicode编码的字符串。每个字符的类型为QChar，长度为2个字节，存放着该字符在Unicode 4.0标准中的编码。对于编码值大于65535的字符，用两个连续的QChar来表示。与标准库中的wstring类似，QString能对Unicode字符串进行拼接、查找等操作。但是，QString的功能更加强大，其中最主要的功能是能够完成Unicode编码方式和其他编码方">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-01-15T03:23:35.000Z">
-<meta property="article:modified_time" content="2022-11-24T02:45:32.161Z">
+<meta property="article:modified_time" content="2022-11-24T03:12:34.704Z">
 <meta property="article:author" content="dc">
 <meta property="article:tag" content="C++&#x2F;QT">
 <meta name="twitter:card" content="summary">
@@ -194,7 +194,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="Qt中的QString"><a href="#Qt中的QString" class="headerlink" title="Qt中的QString"></a>Qt中的QString</h1><p>QString负责存储、操作Unicode编码的字符串。每个字符的类型为QChar，长度为2个字节，存放着该字符在Unicode 4.0标准中的编码。<br>对于编码值大于65535的字符，用两个连续的QChar来表示。与标准库中的wstring类似，QString能对Unicode字符串进行拼接、查找等操作。<br>但是，QString的功能更加强大，其中最主要的功能是能够完成Unicode编码方式和其他编码方式之间的转换</p>
+        <p>QString负责存储、操作Unicode编码的字符串。每个字符的类型为QChar，长度为2个字节，存放着该字符在Unicode 4.0标准中的编码。<br>对于编码值大于65535的字符，用两个连续的QChar来表示。与标准库中的wstring类似，QString能对Unicode字符串进行拼接、查找等操作。<br>但是，QString的功能更加强大，其中最主要的功能是能够完成Unicode编码方式和其他编码方式之间的转换</p>
 <span id="more"></span>
 
 <h1 id="为什么Qt不使用wstring派生"><a href="#为什么Qt不使用wstring派生" class="headerlink" title="为什么Qt不使用wstring派生"></a>为什么Qt不使用wstring派生</h1><p>一个原因是QString比wstring出现得早：Haavard Nord和Eirik Chambe-Eng于1991年开始开发Qt，在1993年时完成首个图形核心，因而可以推测QString出现在1993年之前。而basic_string（及模板特化所得的string以及wstring）于1994年才被纳入C++标准<br>在basic_string出现之后，虽然Qt的开发者可以摒弃QString，转而使用C++标准中的wstring，但是由于Qt库本身大量用到了QString，修改的工作量太大。而且，虽然wstring本身能够存储Unicode编码的字符串，但是为了完成某些操作，比如判断字符串中的某个字符是否为标点符号，还需要C++标准中locale等类的支持。即使到现在，还并不是所有的C++开发平台都能支持得很好的。而QString则不同，它集成了丰富的Unicode字符串处理功能。只要是使用Qt进行开发，这些功能在所有开发平台上都是可用的。</p>
@@ -291,7 +291,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Qt%E4%B8%AD%E7%9A%84QString"><span class="nav-number">1.</span> <span class="nav-text">Qt中的QString</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88Qt%E4%B8%8D%E4%BD%BF%E7%94%A8wstring%E6%B4%BE%E7%94%9F"><span class="nav-number">2.</span> <span class="nav-text">为什么Qt不使用wstring派生</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Qstring%E5%AF%B9%E8%B1%A1%E6%9E%84%E9%80%A0"><span class="nav-number">3.</span> <span class="nav-text">Qstring对象构造</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QByteArray%E7%B1%BB"><span class="nav-number">4.</span> <span class="nav-text">QByteArray类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QString%E7%9A%84%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E8%BD%AC%E6%8D%A2%E5%8A%9F%E8%83%BD"><span class="nav-number">5.</span> <span class="nav-text">QString的字符编码转换功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QString%E7%9A%84%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD"><span class="nav-number">6.</span> <span class="nav-text">QString的其他常用功能</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88Qt%E4%B8%8D%E4%BD%BF%E7%94%A8wstring%E6%B4%BE%E7%94%9F"><span class="nav-number">1.</span> <span class="nav-text">为什么Qt不使用wstring派生</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Qstring%E5%AF%B9%E8%B1%A1%E6%9E%84%E9%80%A0"><span class="nav-number">2.</span> <span class="nav-text">Qstring对象构造</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QByteArray%E7%B1%BB"><span class="nav-number">3.</span> <span class="nav-text">QByteArray类</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QString%E7%9A%84%E5%AD%97%E7%AC%A6%E7%BC%96%E7%A0%81%E8%BD%AC%E6%8D%A2%E5%8A%9F%E8%83%BD"><span class="nav-number">4.</span> <span class="nav-text">QString的字符编码转换功能</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#QString%E7%9A%84%E5%85%B6%E4%BB%96%E5%B8%B8%E7%94%A8%E5%8A%9F%E8%83%BD"><span class="nav-number">5.</span> <span class="nav-text">QString的其他常用功能</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -305,7 +305,7 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">20</span>
+          <span class="site-state-item-count">21</span>
           <span class="site-state-item-name">posts</span>
         </a>
       </div>
