@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/d.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/d.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/d.png">
+  <link rel="mask-icon" href="/images/d.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="什么是GDBGDB，GNU 项目调试器,允许您查看另一个程序在执行时“内部”发生了什么——或者另一个程序在崩溃时正在做什么。GDB 可以做四种主要的事情(加上其他支持这些的事情)来帮助你在行动中捕捉错误:• 启动程序,设置可能影响其行为的任何内容• 可以让程序在特定条件下停止• 当程序停止时查看发生了什么• 更改程序中的内容,这样就可以尝试修改一个错误并看到表现被调试的程序可以用 Ada、C、C+">
+<meta property="og:type" content="article">
+<meta property="og:title" content="gdb调试">
+<meta property="og:url" content="http://example.com/2022/03/02/gdb%E8%B0%83%E8%AF%95/index.html">
+<meta property="og:site_name" content="午饭吃啥">
+<meta property="og:description" content="什么是GDBGDB，GNU 项目调试器,允许您查看另一个程序在执行时“内部”发生了什么——或者另一个程序在崩溃时正在做什么。GDB 可以做四种主要的事情(加上其他支持这些的事情)来帮助你在行动中捕捉错误:• 启动程序,设置可能影响其行为的任何内容• 可以让程序在特定条件下停止• 当程序停止时查看发生了什么• 更改程序中的内容,这样就可以尝试修改一个错误并看到表现被调试的程序可以用 Ada、C、C+">
+<meta property="og:locale">
+<meta property="article:published_time" content="2022-03-02T11:51:46.000Z">
+<meta property="article:modified_time" content="2022-12-29T12:19:47.465Z">
+<meta property="article:author" content="dc">
+<meta property="article:tag" content="调试">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2022/03/02/gdb%E8%B0%83%E8%AF%95/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>gdb调试 | 午饭吃啥</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">午饭吃啥</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">螺蛳粉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2022/03/02/gdb%E8%B0%83%E8%AF%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dc">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="午饭吃啥">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          gdb调试
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2022-03-02 19:51:46" itemprop="dateCreated datePublished" datetime="2022-03-02T19:51:46+08:00">2022-03-02</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="什么是GDB"><a href="#什么是GDB" class="headerlink" title="什么是GDB"></a>什么是GDB</h1><p>GDB，GNU 项目调试器,允许您查看另一个程序在执行时“内部”发生了什么——或者另一个程序在崩溃时正在做什么。<br>GDB 可以做四种主要的事情(加上其他支持这些的事情)来帮助你在行动中捕捉错误:<br>• 启动程序,设置可能影响其行为的任何内容<br>• 可以让程序在特定条件下停止<br>• 当程序停止时查看发生了什么<br>• 更改程序中的内容,这样就可以尝试修改一个错误并看到表现<br>被调试的程序可以用 Ada、C、C++、Objective-C、Pascal(以及许多其他语言)编写。这些程序可能在与GDB(本机)相同的机器上或在另一台机器(远程)上执行. GDB 可以在大多数流行的 UNIX 和 Microsoft Windows 变体上运行。</p>
+<span id="more"></span>
+
+<h1 id="GDB调试信息-x2F-符号表"><a href="#GDB调试信息-x2F-符号表" class="headerlink" title="GDB调试信息&#x2F;符号表"></a>GDB调试信息&#x2F;符号表</h1><p>符号是变量和函数,符号表是可执行文件中的变量和函数表,通常符号表只包含符号的内存地址,比如<br>0x898964d类似的地址,计算机不关心命名的变量和函数,但是gdb为了调试,需要能够引用变量和函数名<br>称而不是地址,因此我们需要”调试信息”编译在代码中.<br>“调试信息”告诉 GDB 2件事:<br>• 如何将符号的地址和源代码的名称关联<br>• 如何将机器代码的地址与每一行源代码关联<br>检查可执行文件是否携带调试信息一般使用file programe_path查看,如果提示with debug_info, not stripped代表携带调试信息,如果提示striped代表调试信息被剥离,或者使用objdump -syms program_path | grep debug, 如果有debug字段代表就是携带调试信息.执行程序发布的时候通常编译选项是-g -O3,然后剥离一份带调试信息一份不带调试信息的执行程序,用于后续奔溃时调试定位问题.<br>例如步骤:<br>• objcopy –only-keep-debug program program.dbg 只保留调试信息的可执行文件  (无所谓尾缀是什么,dbx xxx都可以)<br>• strip –strip-all program 剥离所有调试符号信息的可执行文件<br>• objcopy –add-gnu-debuglink&#x3D;program.dbg program 将指向调试信息的链接添加到剥离的可执行文件中 (调试时可执行程序会在当前目录或者.debug下查找携带调试信息的program.dbg文件)<br>携带调试信息的执行程序执行时，调试信息不会加载到内存中,除非 GDB 加载可执行文件。这意味着带有调试信息的可执行文件不会比没有调试信息的可执行文件运行得慢(一个常见的误解)</p>
+<h2 id="GDB启动调试的方式"><a href="#GDB启动调试的方式" class="headerlink" title="GDB启动调试的方式"></a>GDB启动调试的方式</h2><p>• gdb –args programe_path arg1 garg2 …     直接调试可执行文件<br>• gdb programe_path core_dump_path or gdb -core core_dump_path     调试可执行文件生成的核心转储文件<br>• gdb attach pid_of_programe     调试运行中的可执行文件<br>• …<br>GDB常用调试命令<br>命令        简写                描述<br>run         r           run [arg1 …]启动调试可执行程序<br>layout      layout      src或者ctrl+x+a查看当前断点源码<br>disassemble disa        查看汇编代码<br>continue    c           继续运行程序知道遇到断点或者错误<br>finish      fin         运行直到当前函数完成<br>until                   运行直到当前代码块结束或循环退出<br>frame       f           f [num]跳转当前调用堆栈帧到指定调用堆栈帧,无参数显示当前帧信息<br>backtrace   bt          显示调用堆栈,bt full显示完全堆栈<br>breakpoint  b           设置断点<br>print       p           打印变量值,只打印一次<br>display     disp        打印变量值,每次执行流程经过变量时打印<br>step        s           步进,遇到函数进入函数内部<br>next        n           单步,遇到函数作为单行执行跳过<br>info        i           i b&#x2F;register&#x2F;threads&#x2F;locals,用于查看对应信息<br>commands                commands break_num 断点命令列表,断点&#x2F;观察点触发时可执行一系列命令<br>thread thread_num       切换线程,thread_num是info threads对应的编号<br>call syscall&#x2F;function   调用系统函数或者编写的函数,例如 call system(“env&gt;&#x2F;tmp&#x2F;log”) 查看运行时环境变量</p>
+<h1 id="GDB命令的一些细节"><a href="#GDB命令的一些细节" class="headerlink" title="GDB命令的一些细节"></a>GDB命令的一些细节</h1><h2 id="GDB断点"><a href="#GDB断点" class="headerlink" title="GDB断点"></a>GDB断点</h2><p>1.设置断点<br>• break linenumber  在行号处设置断点<br>• break function    在函数处设置断点<br>• break filename:linenumber 在文件指定行号处设置断点<br>• break filename:function 在文件指定函数处设置断点<br>• *break address 在内存地址处设置断点,一般用于没有调试信息的执行文件处设置断点</p>
+<p>2.设置条件断点:<br>• break … if condition<br>“…”指代前面设置断点的通用方式, condition可以是断点上下文中的变量例如 i &#x3D;&#x3D; 1, 字符串其中可以使用strcmp来比较,不过不建议使用, 因为可能会影响调试时调用堆栈环境导致奔溃,建议使用gdb内置的函数.<br>• break … if $_streq(str, “xxx”)  字符串相等判断断点<br>• break … if $_caller_is(“main”[, frame_num]) 函数调用者判断,frame_num如果设置代表指定的帧<br>• break … if $_memeq(buf1,buf2,length) 内存比较<br>• break … if $_regex(str, regex) 字符串正则比较<br>具体其他函数可以在gdb内调用 help function 查看</p>
+<p>3.查看断点:<br>• info breakpoints</p>
+<p>4.清除断点:<br>• clear linenumber 清除行号处所有的断点<br>• clear function 清除函数入口处所有的断点<br>• clear filename:linenumber&#x2F;function 清除指定文件行或函数处的所有断点<br>• delete 清除所有断点<br>• delete n 清除指定编号的断点</p>
+<p>5.断点命令列表:<br>• commands break_num 可用在相应的断点触发时,执行一系列的gdb命令,silent隐藏断点触发时打印的一些信息,结束设置commands设置end结束.断点命令的一个应用是补偿一个错误，以便您可以测试另一个错误</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b 10</span><br><span class="line">Breakpoint 6 at 0x40122f: file ...cpp, line 10.</span><br><span class="line">(gdb) commands 10</span><br><span class="line">(gdb) silent</span><br><span class="line">(gdb) set value = 200</span><br><span class="line">(gdb) c</span><br><span class="line">(gdb) end</span><br></pre></td></tr></table></figure>
+
+<h2 id="查看变量"><a href="#查看变量" class="headerlink" title="查看变量"></a>查看变量</h2><p>显示变量的类型可以使用ptype简写pt,会直接显示变量的基础类型并忽略C++的using别名及typedef. whatis只是显示声明变量时的类型<br>查看变量的值使用print,简写p,格式是”print [&#x2F;FMT] value”,无参数&#x2F;FMT则是以”最舒适的”显示状态打印值,print 无法打印一些std::string,或者宽字符,必须强转为char*类型才能显示</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">(/FMT: /o = octal,/x = hex, /d = decimal, /u	= unsigned decimal, /t = binary, /f = float, /a	= address, /c = char)</span><br><span class="line"></span><br><span class="line">uint32_t value;</span><br><span class="line">char mychar;</span><br><span class="line">QString str = &quot;testing&quot;;</span><br><span class="line">...</span><br><span class="line">(gdb) pt value</span><br><span class="line">type = unsigned int</span><br><span class="line">(gdb) whatis value</span><br><span class="line">type = uint32_t</span><br><span class="line">(gdb) p mychar</span><br><span class="line">$33 = 65 &#x27;A&#x27;</span><br><span class="line">(gdb) p /o mychar</span><br><span class="line">$34 = 0101</span><br><span class="line">(gdb) p /x mychar</span><br><span class="line">$35 = 0x41</span><br><span class="line">(gdb) p /d mychar</span><br><span class="line">$36 = 65</span><br><span class="line">(gdb) p /u mychar</span><br><span class="line">$37 = 65</span><br><span class="line">(gdb) p /t mychar</span><br><span class="line">$38 = 1000001</span><br><span class="line">(gdb) p /f mychar</span><br><span class="line">$39 = 65</span><br><span class="line">(gdb) p /a mychar</span><br><span class="line">$40 = 0x41</span><br><span class="line">(gdb) p str.toUtf8().constData()</span><br><span class="line">$41 = &quot;testing&quot;</span><br></pre></td></tr></table></figure>
+<h2 id="设置变量"><a href="#设置变量" class="headerlink" title="设置变量"></a>设置变量</h2><p>set value &#x3D; 200 可在调试过程中改变变量的值,用于调试其他逻辑代码走向,通常也可在断点触发时改变值,以此持久改变值</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">(gdb) b 10</span><br><span class="line">Breakpoint 6 at 0x40122f: file ...cpp, line 10.</span><br><span class="line">(gdb) commands 10</span><br><span class="line">(gdb) set value = 200</span><br><span class="line">(gdb) c</span><br><span class="line">(gdb) end这样每次断点触发时,自动设置值,然后continue执行程序</span><br></pre></td></tr></table></figure>
+
+<h2 id="GDB分离执行程序IO和GDB-IO输出"><a href="#GDB分离执行程序IO和GDB-IO输出" class="headerlink" title="GDB分离执行程序IO和GDB IO输出"></a>GDB分离执行程序IO和GDB IO输出</h2><p>gdb调试执行程序时,执行程序会输出大量IO扰乱调试界面或者gdb IO输出,可在调试时tty指定到其他终端的tty</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//终端1</span><br><span class="line">$ tty</span><br><span class="line">/dev/pts/6</span><br><span class="line">...</span><br><span class="line">//终端2</span><br><span class="line">(gdb) tty /dev/pts/6</span><br><span class="line">(gdb)</span><br></pre></td></tr></table></figure>
+<h2 id="不退出GDB重新编译程序"><a href="#不退出GDB重新编译程序" class="headerlink" title="不退出GDB重新编译程序"></a>不退出GDB重新编译程序</h2><p>不退出GDB调试,直接重新编译程序,然后在GDB中run&#x2F;r重新运行GDB,GDB会注意到可执行程序文件更新重新加载新的二进制文件,至少比重新启动GDB调试快很多,在调试远程程序挂载时有一定的帮助</p>
+<h2 id="向后执行程序"><a href="#向后执行程序" class="headerlink" title="向后执行程序"></a>向后执行程序</h2><p>在调试程序的时候,往往会调试过快,发现错过了某些重点函数,GDB允许向后执行程序,撤销执行的指令,反向执行源代码之后,该代码所有的副作用都会撤销,内存和寄存器恢复到之前的状态,不过有时设备IO会撤销失败<br>• record<br>激活反向执行命令记录<br>• record stop<br>停止命令记录<br>• reverse-continue [ignore-count]<br>• rc [ignore-count]<br>回到上次continue&#x2F;c停止的地方<br>• reverse-step [ignore-count]<br>• rs [ignore-count]<br>回到上次step停止的地方<br>• reverse-next<br>• rn [ignore-count]<br>回到上次next停止的地方<br>• reverse-finish [ignore-count]<br>• rfin [ignore-count]<br>回到上次函数跳出的地方</p>
+<h2 id="远程调试时源码相对位置替换"><a href="#远程调试时源码相对位置替换" class="headerlink" title="远程调试时源码相对位置替换"></a>远程调试时源码相对位置替换</h2><p>有时本地或者远程调试的程序,源码文件位置不在原编译时的路径,导致gdb调试时找不到对应源码,一般有两种方式解决:<br>• 比较直接的方式就是在对应编译路径上,软连接或这直接mv原来的源码会到之前的位置,如果是远程的sshfs挂载的情况,比如编译目录是&#x2F;home&#x2F;xxxx&#x2F;project&#x2F;Coding&#x2F;前缀,那就在远程电脑中执行 mkdir -p &#x2F;home&#x2F;w&#x2F;project&#x2F;Coding&#x2F; &amp;&amp; sudo sshfs -oallow_other,default_permissions user@host:&#x2F;home&#x2F;w&#x2F;project&#x2F;Coding&#x2F; &#x2F;home&#x2F;w&#x2F;project&#x2F;Coding&#x2F;这样gdb也可以找到<br>• 另一种方式就是要知道gdb有个source path:$cdir:$cwd路径搜索规则,$cdir代表 compile path 编译路径, $cwd代表 current working directory 等于 gdb启动时的当前路径.<br>例如源码路径是 &#x2F;home&#x2F;xxxx&#x2F;project&#x2F;Coding&#x2F;main.cpp,则搜索路径就是:<br>• &#x2F;home&#x2F;w&#x2F;project&#x2F;Coding&#x2F;main.cpp<br>• $cdir&#x2F;home&#x2F;w&#x2F;project&#x2F;Coding&#x2F;main.cpp<br>• $cwd&#x2F;home&#x2F;w&#x2F;project&#x2F;Coding&#x2F;main.cpp<br>• $cdir&#x2F;main.cpp<br>• $cwd&#x2F;main.cpp<br>调试信息记录的源码路径只会全路径拼接和filename拆分下来查找,不会部分拆分去查找.<br>例如不会这么拼接, &#x2F;home&#x2F;xxxx&#x2F;main.cpp or $cdir&#x2F;Coding&#x2F;main.cpp 去查找.<br>如果原始文件的路径是这个 &#x2F;home&#x2F;xxxx&#x2F;project&#x2F;Coding&#x2F;main.cpp<br>迁移之后的文件在其他位置 &#x2F;home&#x2F;testing&#x2F;xxx&#x2F;Coding&#x2F;main.cpp<br>则可以在gdb内使用命令替换源码路径规则:<br>• set substitute-path from to<br>• set substitute-path &#x2F;home&#x2F;xxxx&#x2F;project&#x2F;Coding&#x2F; &#x2F;home&#x2F;testing&#x2F;xxx&#x2F;Coding&#x2F;<br>• 或者直接在gdb内使用 directory &#x2F;home&#x2F;testing&#x2F;xxx&#x2F;Coding,则代表 source path:&#x2F;home&#x2F;testing&#x2F;xxx&#x2F;Coding:$cdir:$cwd 添加搜索路径,不过这样比较鸡肋如果文件路径有相对的且较多的情况比较麻烦,再次调用directory无参数,重置 回默认,如果需要查看source path, 需要gdb调试时调用 info source 查看路径信息</p>
+<h2 id="GDB中执行shell命令"><a href="#GDB中执行shell命令" class="headerlink" title="GDB中执行shell命令"></a>GDB中执行shell命令</h2><p>• shell command-string<br>• !command-string<br>调用标准shell($SHELL)来执行command-string,!command-string不需要空格<br>• pipe [command] | shell_command | [command] | shell_command<br>执行command并输出给shell_command去使用<br>例子:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">(gdb) p var</span><br><span class="line">$1 = &#123;</span><br><span class="line">black = 144,</span><br><span class="line">red = 233,</span><br><span class="line">green = 377,</span><br><span class="line">blue = 610,</span><br><span class="line">white = 987</span><br><span class="line">&#125;</span><br><span class="line">(gdb) pipe p var|wc</span><br><span class="line">7      19      80</span><br><span class="line">(gdb) |p var|wc -l</span><br><span class="line">7</span><br><span class="line">(gdb) p /x var</span><br><span class="line">$4 = &#123;</span><br><span class="line">black = 0x90,</span><br><span class="line">red = 0xe9,</span><br><span class="line">green = 0x179,</span><br><span class="line">blue = 0x262,</span><br><span class="line">white = 0x3db</span><br><span class="line">&#125;</span><br><span class="line">(gdb) ||grep red</span><br><span class="line">red =&gt; 0xe9,</span><br><span class="line">(gdb) | -d ! echo this contains a | char\n ! sed -e &#x27;s/|/PIPE/&#x27;</span><br><span class="line">this contains a PIPE char</span><br><span class="line">(gdb) | -d xxx echo this contains a | char!\n xxx sed -e &#x27;s/|/PIPE/&#x27;</span><br><span class="line">this contains a PIPE char!</span><br><span class="line">(gdb)</span><br></pre></td></tr></table></figure>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E8%B0%83%E8%AF%95/" rel="tag"># 调试</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2022/02/27/ubuntu22%E7%BC%96%E8%AF%91qtcreator/" rel="prev" title="ubuntu22编译qtcreator">
+      <i class="fa fa-chevron-left"></i> ubuntu22编译qtcreator
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2022/11/12/macos%E5%BC%80%E4%B8%A4%E4%B8%AA%E5%BE%AE%E4%BF%A1-md/" rel="next" title="macos开两个微信">
+      macos开两个微信 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFGDB"><span class="nav-number">1.</span> <span class="nav-text">什么是GDB</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GDB%E8%B0%83%E8%AF%95%E4%BF%A1%E6%81%AF-x2F-%E7%AC%A6%E5%8F%B7%E8%A1%A8"><span class="nav-number">2.</span> <span class="nav-text">GDB调试信息&#x2F;符号表</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GDB%E5%90%AF%E5%8A%A8%E8%B0%83%E8%AF%95%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">GDB启动调试的方式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#GDB%E5%91%BD%E4%BB%A4%E7%9A%84%E4%B8%80%E4%BA%9B%E7%BB%86%E8%8A%82"><span class="nav-number">3.</span> <span class="nav-text">GDB命令的一些细节</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GDB%E6%96%AD%E7%82%B9"><span class="nav-number">3.1.</span> <span class="nav-text">GDB断点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%8F%98%E9%87%8F"><span class="nav-number">3.2.</span> <span class="nav-text">查看变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AE%E5%8F%98%E9%87%8F"><span class="nav-number">3.3.</span> <span class="nav-text">设置变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GDB%E5%88%86%E7%A6%BB%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8FIO%E5%92%8CGDB-IO%E8%BE%93%E5%87%BA"><span class="nav-number">3.4.</span> <span class="nav-text">GDB分离执行程序IO和GDB IO输出</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%8D%E9%80%80%E5%87%BAGDB%E9%87%8D%E6%96%B0%E7%BC%96%E8%AF%91%E7%A8%8B%E5%BA%8F"><span class="nav-number">3.5.</span> <span class="nav-text">不退出GDB重新编译程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%91%E5%90%8E%E6%89%A7%E8%A1%8C%E7%A8%8B%E5%BA%8F"><span class="nav-number">3.6.</span> <span class="nav-text">向后执行程序</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9C%E7%A8%8B%E8%B0%83%E8%AF%95%E6%97%B6%E6%BA%90%E7%A0%81%E7%9B%B8%E5%AF%B9%E4%BD%8D%E7%BD%AE%E6%9B%BF%E6%8D%A2"><span class="nav-number">3.7.</span> <span class="nav-text">远程调试时源码相对位置替换</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GDB%E4%B8%AD%E6%89%A7%E8%A1%8Cshell%E5%91%BD%E4%BB%A4"><span class="nav-number">3.8.</span> <span class="nav-text">GDB中执行shell命令</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">dc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dc</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
