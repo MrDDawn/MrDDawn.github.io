@@ -257,7 +257,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="什么是GDB"><a href="#什么是GDB" class="headerlink" title="什么是GDB"></a>什么是GDB</h1><p>GDB，GNU 项目调试器,允许您查看另一个程序在执行时“内部”发生了什么——或者另一个程序在崩溃时正在做什么。<br>GDB 可以做四种主要的事情(加上其他支持这些的事情)来帮助你在行动中捕捉错误:<br>• 启动程序,设置可能影响其行为的任何内容<br>• 可以让程序在特定条件下停止<br>• 当程序停止时查看发生了什么<br>• 更改程序中的内容,这样就可以尝试修改一个错误并看到表现<br>被调试的程序可以用 Ada、C、C++、Objective-C、Pascal(以及许多其他语言)编写。这些程序可能在与GDB(本机)相同的机器上或在另一台机器(远程)上执行. GDB 可以在大多数流行的 UNIX 和 Microsoft Windows 变体上运行。</p>
+          <p>GDB，GNU 项目调试器,允许您查看另一个程序在执行时“内部”发生了什么——或者另一个程序在崩溃时正在做什么。</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/03/02/gdb%E8%B0%83%E8%AF%95/#more" rel="contents">
@@ -387,8 +387,7 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <h1 id="下载代码"><a href="#下载代码" class="headerlink" title="下载代码"></a>下载代码</h1><p><a target="_blank" rel="noopener" href="http://ftp.gnu.org/gnu/gdb/gdb-11.2.tar.gz">http://ftp.gnu.org/gnu/gdb/gdb-11.2.tar.gz</a></p>
-<h1 id="设置编译所需的python环境变量"><a href="#设置编译所需的python环境变量" class="headerlink" title="设置编译所需的python环境变量"></a>设置编译所需的python环境变量</h1><p>[ -z “${PYTHON}” ] &amp;&amp; export PYTHON&#x3D;python3<br>PYTHON_LIBDIR&#x3D;$(“${PYTHON}” -c <br>   “import sysconfig; print(sysconfig.get_config_var(‘LIBDIR’))”)</p>
+          <p>由于gdb12在ubuntu22版本debug贼慢，本文记录一下gdb11编译</p>
           <!--noindex-->
             <div class="post-button">
               <a class="btn" href="/2022/02/10/gdb11%E7%BC%96%E8%AF%91/#more" rel="contents">
