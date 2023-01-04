@@ -28,7 +28,7 @@
 <meta property="og:description" content="消息队列是一种以链表式结构组织的一组数据，存放在内核中，是由各进程通过消息队列标识符来引用的一种数据传送方式。像其他两种IPC对象一样，也是由内核来维护。消息队列是三个IPC对象类型中最具有数据操作性的数据传送方式，在消息队列中可以随意根据特定的数据类型值来检索消息。">
 <meta property="og:locale">
 <meta property="article:published_time" content="2021-11-04T02:12:11.000Z">
-<meta property="article:modified_time" content="2023-01-04T12:21:48.948Z">
+<meta property="article:modified_time" content="2023-01-04T12:25:59.564Z">
 <meta property="article:author" content="dc">
 <meta property="article:tag" content="linux">
 <meta name="twitter:card" content="summary">
@@ -253,23 +253,8 @@
 <td>&lt;0</td>
 <td>接收消息队列中类型值小于等于type的绝对值的所有消息中类型值最小的那一条消息</td>
 </tr>
-<tr>
-<td>msgrcv解除阻塞的条件有3个：</td>
-<td></td>
-</tr>
-<tr>
-<td>●  消息队列中有了满足条件的消息。</td>
-<td></td>
-</tr>
-<tr>
-<td>●  msqid代表的消息队列被删除。</td>
-<td></td>
-</tr>
-<tr>
-<td>●  调用msgrcv的进程被某个信号中断。</td>
-<td></td>
-</tr>
 </tbody></table>
+<p>msgrcv解除阻塞的条件有3个：<br>●  消息队列中有了满足条件的消息。<br>●  msqid代表的消息队列被删除。<br>●  调用msgrcv的进程被某个信号中断。</p>
 <h1 id="获得或设置消息队列属性"><a href="#获得或设置消息队列属性" class="headerlink" title="获得或设置消息队列属性"></a>获得或设置消息队列属性</h1><p>消息队列的信息基本上都保存在消息队列头中，因此，可以分配一个类似于消息队列头的结构struct msqid_ds来返回消息队列的属性；同样可以设置该数据结构。关于消息队列属性的操作的系统调用如下：</p>
 <figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/msg.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">msgctl</span> <span class="params">(<span class="type">int</span> msqid, <span class="type">int</span> cmd, <span class="keyword">struct</span> msqid_ds *buf)</span></span>;</span><br></pre></td></tr></table></figure>
 <p>返回：若成功则返回0，否则返回-1。<br>该系统调用对由msqid标识的消息队列执行cmd操作，共有3种cmd操作：IPC_STAT、IPC_SET、IPC_RMID，它们的含义分别如下：<br>●  IPC_STAT：该命令用来获取消息队列信息，返回的信息存贮在buf指向的msqid_ds结构中。<br>●  IPC_SET：该命令用来设置消息队列的属性，要设置的属性存储在buf指向的msqid_ds结构中；可设置属性包括msg_perm.uid、msg_perm.gid、msg_perm.mode及msg_qbytes，同时，也影响msg_ctime成员。<br>●  IPC_RMID：删除msqid标识的消息队列。</p>
