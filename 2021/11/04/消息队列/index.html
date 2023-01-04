@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/d.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/d.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/d.png">
+  <link rel="mask-icon" href="/images/d.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="消息队列是一种以链表式结构组织的一组数据，存放在内核中，是由各进程通过消息队列标识符来引用的一种数据传送方式。像其他两种IPC对象一样，也是由内核来维护。消息队列是三个IPC对象类型中最具有数据操作性的数据传送方式，在消息队列中可以随意根据特定的数据类型值来检索消息。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="消息队列">
+<meta property="og:url" content="http://example.com/2021/11/04/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/index.html">
+<meta property="og:site_name" content="午饭吃啥">
+<meta property="og:description" content="消息队列是一种以链表式结构组织的一组数据，存放在内核中，是由各进程通过消息队列标识符来引用的一种数据传送方式。像其他两种IPC对象一样，也是由内核来维护。消息队列是三个IPC对象类型中最具有数据操作性的数据传送方式，在消息队列中可以随意根据特定的数据类型值来检索消息。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-11-04T02:12:11.000Z">
+<meta property="article:modified_time" content="2023-01-04T12:21:48.948Z">
+<meta property="article:author" content="dc">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2021/11/04/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>消息队列 | 午饭吃啥</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">午饭吃啥</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">螺蛳粉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/11/04/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dc">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="午饭吃啥">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          消息队列
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-11-04 10:12:11" itemprop="dateCreated datePublished" datetime="2021-11-04T10:12:11+08:00">2021-11-04</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>消息队列是一种以链表式结构组织的一组数据，存放在内核中，是由各进程通过消息队列标识符来引用的一种数据传送方式。像其他两种IPC对象一样，也是由内核来维护。消息队列是三个IPC对象类型中最具有数据操作性的数据传送方式，在消息队列中可以随意根据特定的数据类型值来检索消息。</p>
+<span id="more"></span>
+
+<h1 id="什么是消息队列"><a href="#什么是消息队列" class="headerlink" title="什么是消息队列"></a>什么是消息队列</h1><p>消息队列（也叫做报文队列）能够克服早期UNIX通信机制的一些缺点。<br>比如作为早期UNIX通信机制之一的信号，它所能够传送的信息量是很有限的，后来虽然POSIX 1003.1b在信号的实时性方面做了拓展，使得信号在传递信息量方面有了相当程度的改进，但信号更像是一种“即时”的通信方式，它要求接受信号的进程在某个时间范围内对信号做出反应，因此该信号最多在接受信号进程的生命周期内才有意义，信号所传递的信息是接近于随进程持续（process-persistent）的概念。<br>管道及有名管道则是典型的随进程持续IPC，并且，只能传送无格式的字节流无疑会给应用程序开发带来不便，另外，它的缓冲区大小也受到限制。<br>消息队列就是一个消息的链表。可以把消息看做一个记录，具有特定的格式及特定的优先级。对消息队列有写权限的进程可以向其中按照一定的规则添加新消息；对消息队列有读权限的进程则可以从消息队列中读走消息。消息队列是随内核持续（kernel-persistent）的。</p>
+<p>目前主要有两种类型的消息队列：POSIX消息队列及System V消息队列，System V消息队列目前被大量使用。考虑到程序的可移植性，新开发的应用程序应尽量使用POSIX消息队列。<br>以下简单介绍以下System V消息队列</p>
+<p>System V消息队列是随内核持续的，只有在内核重起或者显示删除一个消息队列时，该消息队列才会真正被删除。因此系统中记录消息队列的数据结构（struct ipc_ids msg_ids）位于内核中，系统中的所有消息队列都可以在结构msg_ids中找到访问入口。</p>
+<h1 id="消息队列的创建与打开"><a href="#消息队列的创建与打开" class="headerlink" title="消息队列的创建与打开"></a>消息队列的创建与打开</h1><p>消息队列的内核持续性要求每个消息队列都在系统范围内对应唯一的键值，所以，要获得一个消息队列的引用标识符（ID）——即创建或打开消息队列，只需提供该消息队列的键值即可。<br>ps:消息队列的内核持续性要求每个消息队列都在系统范围内对应唯一的键值，所以，要获得一个消息队列的引用标识符（ID）——即创建或打开消息队列，只需提供该消息队列的键值即可。<br>获得特定文件名的键值的系统调用是ftok，函数原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"> <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"> <span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"> <span class="function"><span class="type">key_t</span> <span class="title">ftok</span> <span class="params">(<span class="type">char</span>*pathname, <span class="type">char</span> proj)</span></span>;</span><br><span class="line"><span class="comment">// 返回：若成功返回消息队列的一个键值，若失败则返回-1。</span></span><br></pre></td></tr></table></figure>
+<p>ftok返回与路径pathname相对应的一个键值。该函数并不直接对消息队列操作，但在调用msgget来获得消息队列的标识符前，往往要调用该函数。</p>
+<p>创建或打开一个消息队列的系统调用为msgget，函数原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/msg.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">msgget</span> <span class="params">(<span class="type">key_t</span> key, <span class="type">int</span> msgflg)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>返回：若成功则为消息队列的引用标识符（ID），若失败则返回-1。<br>参数key是一个键值，由ftok获得；msgflg参数是一些标志位，可以取以下值：IPC_CREAT、IPC_EXCL、IPC_NOWAIT或三者的逻辑或结果。该调用返回与键值key相对应的消息队列标识符<br>在以下两种情况下，该调用将创建一个新的消息队列：<br>●  如果没有消息队列与键值key相对应，并且msgflg中包含了IPC_CREAT标志位。<br>● key 参数为IPC_PRIVATE。<br>ps:参数key设置成常数IPC_PRIVATE并不意味着其他进程不能访问该消息队列，只意味着即将创建新的消息队列。</p>
+<p>#消息队列的读写<br>使用消息队列进行进程间的通信，就是要对消息队列进行读和写的操作。写操作即向消息队列中发送数据，而读操作则是从消息队列中接收（读走）数据。</p>
+<h1 id="向消息队列发送数据"><a href="#向消息队列发送数据" class="headerlink" title="向消息队列发送数据"></a>向消息队列发送数据</h1><p>向消息队列发送数据系统调用的函数原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/msg.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">msgsnd</span> <span class="params">(<span class="type">int</span> msqid, <span class="type">const</span> <span class="type">void</span> *prt, <span class="type">size_t</span> nbytes, <span class="type">int</span> flags)</span></span>;</span><br><span class="line"><span class="comment">//返回：若成功则返回0，若出错则返回-1。</span></span><br></pre></td></tr></table></figure>
+<p>msgsnd函数的作用是向一个消息队列发送一个消息，该消息被添加到队列的末尾。参数msqid代表消息队列的引用标识符（ID），参数prt是一个void类型指针，指向要发送的消息，参数nbytes是以字节表示的消息的数据长度，参数flags用于指定消息队列满时的处理方法。<br>对发送消息来说，有意义的flags标志为IPC_NOWAIT，指明在消息队列没有足够空间容纳要发送的消息时，msgsnd是否等待。当消息队列满时，如果设置了IPC_NOWAIT位，则立刻出错返回，否则发送消息的进程被阻塞，直至消息队列中有空间或消息队列被删除时，函数返回。<br>造成msgsnd等待的条件有两种：<br>●  当前消息的大小与当前消息队列中的字节数之和超过了消息队列的总容量。<br>●  当前消息队列中的消息数（单位“个”）不小于消息队列的总容量（单位“字节数”），此时，虽然消息队列中的消息数目很多，但基本上都只有一个字节。<br>msgsnd解除阻塞的条件有3个：<br>●  不满足上述两个条件，即消息队列中有容纳该消息的空间。<br>●  msqid代表的消息队列被删除。<br>●  调用msgsnd的进程被某个信号中断。</p>
+<h1 id="从消息队列接收数据"><a href="#从消息队列接收数据" class="headerlink" title="从消息队列接收数据"></a>从消息队列接收数据</h1><p>从消息队列接收数据系统调用的函数原型如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/msg.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">msgrcv</span> <span class="params">(<span class="type">int</span> msqid, <span class="type">void</span> *prt, <span class="type">size_t</span> nbytes, <span class="type">long</span> type, <span class="type">int</span> flags)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>返回：若成功则返回消息的数据长度，若出错则返回-1。<br>此函数用于从指定的消息队列中读取一个消息数据。参数msqid代表消息队列的引用标识符，prt是一个void类型指针，指向存放消息的缓冲区，nbytes是以字节表示的要接收的消息的数据长度，flags用于指定消息队列满时的处理方法</p>
+<table>
+<thead>
+<tr>
+<th>flags取值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>IPC_NOWAIT</td>
+<td>如果没有满足条件的消息，调用立即返回，此时errorno&#x3D;ENOMSG</td>
+</tr>
+<tr>
+<td>IPC_EXCEPT</td>
+<td>与type&gt;0配合使用，返回队列中第一个类型不为type的消息</td>
+</tr>
+<tr>
+<td>IPC_NOERROR</td>
+<td>如果队列中满足条件的消息内容大于所请求的nbytes字节，则把该消息截断，截断部分将丢失</td>
+</tr>
+</tbody></table>
+<p>参数type表示要接收的消息的类型</p>
+<table>
+<thead>
+<tr>
+<th>type取值</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>type&#x3D;0</td>
+<td>接收消息队列中的第一条消息</td>
+</tr>
+<tr>
+<td>&gt;0</td>
+<td>接收消息队列中类型值等于type的第一条消息</td>
+</tr>
+<tr>
+<td>&lt;0</td>
+<td>接收消息队列中类型值小于等于type的绝对值的所有消息中类型值最小的那一条消息</td>
+</tr>
+<tr>
+<td>msgrcv解除阻塞的条件有3个：</td>
+<td></td>
+</tr>
+<tr>
+<td>●  消息队列中有了满足条件的消息。</td>
+<td></td>
+</tr>
+<tr>
+<td>●  msqid代表的消息队列被删除。</td>
+<td></td>
+</tr>
+<tr>
+<td>●  调用msgrcv的进程被某个信号中断。</td>
+<td></td>
+</tr>
+</tbody></table>
+<h1 id="获得或设置消息队列属性"><a href="#获得或设置消息队列属性" class="headerlink" title="获得或设置消息队列属性"></a>获得或设置消息队列属性</h1><p>消息队列的信息基本上都保存在消息队列头中，因此，可以分配一个类似于消息队列头的结构struct msqid_ds来返回消息队列的属性；同样可以设置该数据结构。关于消息队列属性的操作的系统调用如下：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/types.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/ipc.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;sys/msg.h&gt;</span></span></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">msgctl</span> <span class="params">(<span class="type">int</span> msqid, <span class="type">int</span> cmd, <span class="keyword">struct</span> msqid_ds *buf)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>返回：若成功则返回0，否则返回-1。<br>该系统调用对由msqid标识的消息队列执行cmd操作，共有3种cmd操作：IPC_STAT、IPC_SET、IPC_RMID，它们的含义分别如下：<br>●  IPC_STAT：该命令用来获取消息队列信息，返回的信息存贮在buf指向的msqid_ds结构中。<br>●  IPC_SET：该命令用来设置消息队列的属性，要设置的属性存储在buf指向的msqid_ds结构中；可设置属性包括msg_perm.uid、msg_perm.gid、msg_perm.mode及msg_qbytes，同时，也影响msg_ctime成员。<br>●  IPC_RMID：删除msqid标识的消息队列。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/linux/" rel="tag"># linux</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/10/03/linux%E4%B8%8D%E5%90%8Cshell%E7%9A%84%E5%8C%BA%E5%88%AB/" rel="prev" title="linux不同shell的区别">
+      <i class="fa fa-chevron-left"></i> linux不同shell的区别
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/11/10/linux%E5%88%86%E5%8C%BA%E6%A0%BC%E5%BC%8F/" rel="next" title="linux分区格式">
+      linux分区格式 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97"><span class="nav-number">1.</span> <span class="nav-text">什么是消息队列</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E5%88%9B%E5%BB%BA%E4%B8%8E%E6%89%93%E5%BC%80"><span class="nav-number">2.</span> <span class="nav-text">消息队列的创建与打开</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%91%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%8F%91%E9%80%81%E6%95%B0%E6%8D%AE"><span class="nav-number">3.</span> <span class="nav-text">向消息队列发送数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8E%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E6%8E%A5%E6%94%B6%E6%95%B0%E6%8D%AE"><span class="nav-number">4.</span> <span class="nav-text">从消息队列接收数据</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8E%B7%E5%BE%97%E6%88%96%E8%AE%BE%E7%BD%AE%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E5%B1%9E%E6%80%A7"><span class="nav-number">5.</span> <span class="nav-text">获得或设置消息队列属性</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">dc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">tags</span>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dc</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
