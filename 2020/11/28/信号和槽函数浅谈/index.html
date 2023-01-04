@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/d.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/d.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/d.png">
+  <link rel="mask-icon" href="/images/d.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="Qt使用信号与槽机制进行对象间的通信。当某个对象的状态发生变化时，该对象会触发一个信号。该信号和另外一些对象的槽函数绑定，信号的触发将导致执行这些槽函数，这些槽函数将处理第一个对象状态的变化，完成对象之间的通信。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="信号和槽函数浅谈">
+<meta property="og:url" content="http://example.com/2020/11/28/%E4%BF%A1%E5%8F%B7%E5%92%8C%E6%A7%BD%E5%87%BD%E6%95%B0%E6%B5%85%E8%B0%88/index.html">
+<meta property="og:site_name" content="午饭吃啥">
+<meta property="og:description" content="Qt使用信号与槽机制进行对象间的通信。当某个对象的状态发生变化时，该对象会触发一个信号。该信号和另外一些对象的槽函数绑定，信号的触发将导致执行这些槽函数，这些槽函数将处理第一个对象状态的变化，完成对象之间的通信。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-11-28T08:30:38.000Z">
+<meta property="article:modified_time" content="2022-11-24T07:53:54.270Z">
+<meta property="article:author" content="dc">
+<meta property="article:tag" content="C++&#x2F;QT">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="http://example.com/2020/11/28/%E4%BF%A1%E5%8F%B7%E5%92%8C%E6%A7%BD%E5%87%BD%E6%95%B0%E6%B5%85%E8%B0%88/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>信号和槽函数浅谈 | 午饭吃啥</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">午饭吃啥</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">螺蛳粉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/11/28/%E4%BF%A1%E5%8F%B7%E5%92%8C%E6%A7%BD%E5%87%BD%E6%95%B0%E6%B5%85%E8%B0%88/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dc">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="午饭吃啥">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          信号和槽函数浅谈
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2020-11-28 16:30:38" itemprop="dateCreated datePublished" datetime="2020-11-28T16:30:38+08:00">2020-11-28</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>Qt使用信号与槽机制进行对象间的通信。当某个对象的状态发生变化时，该对象会触发一个信号。该信号和另外一些对象的槽函数绑定，信号的触发将导致执行这些槽函数，这些槽函数将处理第一个对象状态的变化，完成对象之间的通信。</p>
+<span id="more"></span>
+
+<h1 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h1><p>如果我们要实现类似qt信号槽机制的话，有一种可能的做法是实现回调函数<br>我们存放一个函数指针，当状态变换时触发我们注册的函数，但是这种方式并不灵活，如果有多个类都关注某个类的状态变化，存放一个回调函数的信息显然无法满足要求，此时需要维护一个列表，以存放多个回调函数的地址。对于每一个被关注的类，都需要做类似的工作，因而这种做法效率低、不灵活。</p>
+<p>所有qt使用信号槽机制来解决这个问题<br>这种处理方式高效、灵活。Qt有一套专门的机制来处理信号与槽，程序员在软件设计阶段只需要指定一个类含有哪些信号函数、哪些槽函数，Qt会来处理信号函数和槽函数之间的绑定。当信号函数被调用时，Qt会找到并执行与其绑定的槽函数。而且，Qt允许一个信号函数和多个槽函数绑定，Qt会依次找到并执行与一个信号函数绑定的所有槽函数。</p>
+<h1 id="信号槽定义"><a href="#信号槽定义" class="headerlink" title="信号槽定义"></a>信号槽定义</h1><h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">A</span> : <span class="keyword">public</span> QObject&#123;</span><br><span class="line">      Q_OBJECT</span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">      <span class="built_in">A</span>() &#123; value=<span class="number">0</span>; &#125;</span><br><span class="line">      <span class="function"><span class="type">void</span> <span class="title">setValue</span><span class="params">(<span class="type">int</span> newValue)</span> </span>&#123;</span><br><span class="line">            <span class="keyword">if</span> (newValue == value) <span class="keyword">return</span>;</span><br><span class="line">            value = newValue;</span><br><span class="line">            <span class="function">emit <span class="title">stateChanged</span><span class="params">(value)</span></span>;     ①</span><br><span class="line">      &#125;</span><br><span class="line">signals:                                  ②</span><br><span class="line">      <span class="function"><span class="type">void</span> <span class="title">stateChanged</span><span class="params">(<span class="type">int</span> newValue)</span></span>;</span><br><span class="line"><span class="keyword">private</span>:</span><br><span class="line">      <span class="type">int</span> value;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="keyword">class</span> <span class="title class_">B</span>: <span class="keyword">public</span> QObject</span><br><span class="line">&#123;</span><br><span class="line">      Q_OBJECT</span><br><span class="line"><span class="keyword">public</span> slots:                             ③</span><br><span class="line">      <span class="function"><span class="type">void</span> <span class="title">process</span><span class="params">(<span class="type">int</span> newValue)</span> </span>&#123;</span><br><span class="line">            cout &lt;&lt; <span class="string">&quot;newValue= &quot;</span> &lt;&lt; newValue &lt;&lt; endl;</span><br><span class="line">      &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="type">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">      A  a;</span><br><span class="line">      B  b;</span><br><span class="line">      QObject::<span class="built_in">connect</span>(   &amp; a, <span class="built_in">SIGNAL</span>(<span class="built_in">stateChanged</span>(<span class="type">int</span>)),</span><br><span class="line">                          &amp; b, <span class="built_in">SLOT</span>(<span class="built_in">process</span>(<span class="type">int</span>) ) );</span><br><span class="line">      a.<span class="built_in">setValue</span>(<span class="number">100</span>);        ④</span><br><span class="line">      <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="语法约束"><a href="#语法约束" class="headerlink" title="语法约束"></a>语法约束</h2><p>在主函数中，我们调用QObject的静态成员函数connect()，绑定上述信号与槽，如上述代码所示。当行④ 修改对象a的状态（私有成员变量value）时，行① 触发信号函数stateChanged()，与其绑定的、对象b的槽函数process()会被执行，在屏幕上输出对象a新的状态。</p>
+<p>一个类的信号函数应该满足以下语法约束。<br>（1）函数返回值是void类型，因为触发信号函数的目的是执行与其绑定的槽函数，无需信号函数返回任何值。</p>
+<p>（2）程序员只能声明、不能实现信号函数，因为Qt的moc会实现它，无需程序员关心。</p>
+<p>（3）只能以emit关键字“调用”信号函数，不能使用普通的调用方式。</p>
+<p>（4）信号函数被moc自动设置为protected，因而只有包含一个信号函数那个类及其派生类能够触发该信号函数。</p>
+<p>（5）信号函数的参数个数、类型由程序员自由设定，这些参数的职责是封装类的状态信息，并将这些信息传递给槽函数。</p>
+<p>（6）只有QObject及其派生类才可以定义信号函数。</p>
+<p>一个类的槽函数应该满足以下语法约束。<br>（1）函数返回值是void类型，因为信号与槽机制是单向的：信号函数被触发后，与其绑定的槽函数会被执行，但不要求槽函数返回任何执行结果。</p>
+<p>（2）一个类的槽函数可以如同其他成员函数一样被正常调用。</p>
+<p>（3）一个类的槽函数可以是public，protected以及private，这些关键字的含义依旧，也就是说，它们能够控制其他类是否能够以正常的方式调用一个槽函数。但是，这些关键字对connnect函数不起作用，也就是说，我们可以将protected甚至private的槽函数和一个信号函数绑定。当该信号函数被触发时，甚至private的槽函数也会被执行。从某种意义上讲，Qt的信号与槽机制破坏了C++的存取控制规则，但是这种机制带来的灵活性远胜于可能导致的问题。</p>
+<p>（4）只有QObject及其派生类才可以定义槽函数。</p>
+<p>QObject的静态成员函数connect()绑定一个信号函数与一个槽函数，它的使用形式为：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">connect</span>(sender, <span class="built_in">SIGNAL</span>(<span class="built_in">signal_function</span>(…) ),</span><br><span class="line">        receiver,   <span class="built_in">SLOT</span>(<span class="built_in">slot_function</span>(…) ), Qt::ConnectionType type =</span><br><span class="line">        Qt::AutoConnection);</span><br></pre></td></tr></table></figure>
+<p>1.其中sender及receiver都是指向QObject对象的指针，前者指向触发信号的那个对象，后者指向处理信号的那个对象，两者分别被称为“发送者”以及“接收者”。<br>2.最后一个参数具有类型Qt::ConnectionType，默认值为Qt::AutoConnection，表示当信号函数被触发时，如果发送者和接收者位于同一个线程，槽函数会被立即执行。如果两者位于不同的线程，当接收者所在线程运行到事件分发部分时，槽函数才会被执行。<br>3.一个信号函数可以和多个槽函数绑定。</p>
+<p>可以调用QObject的另外一个静态成员函数disconnect()断开一个信号和槽之间的连接，该函数的形式和connect的类似：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">disconnect</span>(sender,  <span class="built_in">SIGNAL</span>(<span class="built_in">signal_function</span>(…),  receiver,   <span class="built_in">SLOT</span>(slot_</span><br><span class="line"><span class="built_in">function</span>(…) ));</span><br></pre></td></tr></table></figure>
+<p>当一个QObject对象被析构时，与之相关的所有连接都会被断开。因此，通常情况下程序员没有必要显式地调用disconnect。</p>
+<p>AutoConnection	           |  0	| (默认值)如果发送者和接受者在同一个线程，与DirectConnection相同，否则，与QueuedConnection相同<br>DirectConnection	        |  1	| 当信号函数被触发时，槽函数在发送者所在线程被立即执行，即使发送者和接受者处于不同线程<br>QueuedConnection	       |  2	   | 当接受者所在线程运行到事件分发部分时，槽函数才会在接受者所属线程被执行<br>BlockingQueuedConnection  |  4	| 只有当发送者和接受者处于不同的线程时方可以使用这种连接类型，否则将导致程序死锁，该连接类型与QueuedConnection类似，只不过在槽函数执行完毕之前，发送者所属线程会阻塞<br>UniqueConnection	        | 0x80	| 与AutoConnection类似，只不过不会建立重复的连接，也就是说，如果将要被绑定的两个对象的信号函数、槽函数已经被绑定，就不再为它建立连接</p>
+<p>对于DirectConnection以及BlockingQueuedConnection类型，只要当与一个信号函数绑定的所有槽函数被执行完毕之后，emit语句后面的语句才会被执行。各槽函数的执行顺序与它们被绑定时的顺序相同。对于QueuedConnection类型，emit语句后面的语句会被立即执行，不会等待槽函数执行完毕。</p>
+<p>本质上，信号与槽是QObject对象之间相互通信的一个机制。即使发送者和接收者相互不知道对方的任何信息，也可以完成通信任务。加之对象之间的连接是在运行时建立的，所以各对象之间的耦合度被大幅降低。各对象的代码可以被独立地开发、测试，也更容易被复用。而且，在绑定一个信号函数和一个槽函数时，编译器会强制检查两者的函数原型是否匹配，以保证这种机制是类型安全的。</p>
+<p>性能方面，信号与槽机制的确比回调函数方式要慢，但是由于它的执行时间非常短，通常情况下不会影响应用程序的性能。依据Qt文档提供的数据，当槽函数是非虚函数时，信号与槽机制比回调函数大约慢10倍。听起来这个速度似乎很慢，但是在i586-500机器上，如果一个信号函数只与一个槽函数绑定，1秒可以触发2,000,000次这样的信号，如果与两个槽函数绑定，1秒可以触发1,200,000次，因而用户实际上根本感觉不到该机制对程序性能的影响。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-QT/" rel="tag"># C++/QT</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/11/25/%E9%9A%90%E5%BC%8F%E5%85%B1%E4%BA%AB%E4%B8%8Ed-pointer%E6%8A%80%E6%9C%AF/" rel="prev" title="隐式共享与d-pointer技术">
+      <i class="fa fa-chevron-left"></i> 隐式共享与d-pointer技术
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/11/29/linux%E7%94%9F%E6%88%90coredump/" rel="next" title="linux生成coredump">
+      linux生成coredump <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8A%A8%E6%9C%BA"><span class="nav-number">1.</span> <span class="nav-text">动机</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BF%A1%E5%8F%B7%E6%A7%BD%E5%AE%9A%E4%B9%89"><span class="nav-number">2.</span> <span class="nav-text">信号槽定义</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">使用方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AF%AD%E6%B3%95%E7%BA%A6%E6%9D%9F"><span class="nav-number">2.2.</span> <span class="nav-text">语法约束</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">dc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dc</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

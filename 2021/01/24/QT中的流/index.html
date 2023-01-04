@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 6.3.0">
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/d.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/d.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/d.png">
+  <link rel="mask-icon" href="/images/d.png" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"example.com","root":"/","scheme":"Mist","version":"7.8.0","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":false,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}}};
+  </script>
+
+  <meta name="description" content="和标准C++的iostream相比，Qt的流框架功能丰富、易于使用。它不但全面支持Unicode字符串的处理，还可以完成Unicode编码和各种字符编码之间的转换。另外，Qt的流框架还能够以二进制方式输入&#x2F;输出程序中的数据。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="QT中的流">
+<meta property="og:url" content="http://example.com/2021/01/24/QT%E4%B8%AD%E7%9A%84%E6%B5%81/index.html">
+<meta property="og:site_name" content="午饭吃啥">
+<meta property="og:description" content="和标准C++的iostream相比，Qt的流框架功能丰富、易于使用。它不但全面支持Unicode字符串的处理，还可以完成Unicode编码和各种字符编码之间的转换。另外，Qt的流框架还能够以二进制方式输入&#x2F;输出程序中的数据。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/images/qt%E6%B5%81%E6%A1%86%E6%9E%B6.png">
+<meta property="article:published_time" content="2021-01-24T02:06:33.000Z">
+<meta property="article:modified_time" content="2022-11-24T02:43:59.489Z">
+<meta property="article:author" content="dc">
+<meta property="article:tag" content="C++&#x2F;QT">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/images/qt%E6%B5%81%E6%A1%86%E6%9E%B6.png">
+
+<link rel="canonical" href="http://example.com/2021/01/24/QT%E4%B8%AD%E7%9A%84%E6%B5%81/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-Hans'
+  };
+</script>
+
+  <title>QT中的流 | 午饭吃啥</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="Toggle navigation bar">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">午饭吃啥</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">螺蛳粉</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>Home</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>Tags</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>Archives</a>
+
+  </li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-Hans">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/24/QT%E4%B8%AD%E7%9A%84%E6%B5%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="dc">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="午饭吃啥">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          QT中的流
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">Posted on</span>
+
+              <time title="Created: 2021-01-24 10:06:33" itemprop="dateCreated datePublished" datetime="2021-01-24T10:06:33+08:00">2021-01-24</time>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <p>和标准C++的iostream相比，Qt的流框架功能丰富、易于使用。它不但全面支持Unicode字符串的处理，还可以完成Unicode编码和各种字符编码之间的转换。<br>另外，Qt的流框架还能够以二进制方式输入&#x2F;输出程序中的数据。</p>
+<span id="more"></span>
+<h1 id="Qt流框架图"><a href="#Qt流框架图" class="headerlink" title="Qt流框架图"></a>Qt流框架图</h1><p><img src="/images/qt%E6%B5%81%E6%A1%86%E6%9E%B6.png" alt="Lena"></p>
+<p>从上述图片可以看出，流中包含两个核心类QTextStream以及QDataStream。</p>
+<ul>
+<li>QTextStream将程序中的数据转换为文本格式，输出到一个Qstring，QIODevice或者QByteArray对象。该类还可以读取这些对象中存放的文本数据，将这些数据转化为程序中的数据。也就是说，QTextStream对数据进行文本格式的输入&#x2F;输出。</li>
+<li>QDataStream对数据进行二进制格式的输入&#x2F;输出。由于QString只存放字符数据，QDataStream的数据源或者输出目标只能是QIODevice或者QByteArray。</li>
+<li>QIODevice具有6个子类。最常用的是QFile，负责文件的处理。QTemporaryFile创建并访问临时文件。QBuffer负责以QIODevice的接口访问一个QByteArray对象。QTextStream和QDataStream都可以直接将一个QByteArray对象作为数据源或者输出目标，只不过QBuffer能够在内部数据变化时发出信号。通过Qt的信号与槽机制，与这些信号相连的对象就能够及时地处理变化的数据。QProcess负责以进程的形式启动一个外部程序，并和该进程进行通信。而QTcpSocket与QUdpSocket负责使用TCP、UDP协议进行网络数据的发送和接收。</li>
+<li>QTextCodec负责Unicode与各种字符编码方式之间的转换。一个QTextStream对象指向一个QTextCodec对象。利用这个类，QTextStream可以将文本数据转换为各种字符编码的数据，存放在QIODevice或者QByteArray中。读取数据时，QTextStream也可以将这些设备中具有某种字符编码的数据转换为Unicode编码的数据。</li>
+<li>QLocale负责实现各种区域文化。一个QTextStream对象指向一个QLocale对象。利用这个类，QTextStream以某种区域文化输出或者输入文本数据。比如，一旦设定QTextStream的区域文化为德语，浮点数“123.456”将被输出为“123,456”。</li>
+</ul>
+<h1 id="类QFile"><a href="#类QFile" class="headerlink" title="类QFile"></a>类QFile</h1><p>类QFile负责文件操作。使用QFile操作一个文件的常用步骤如下。以文件名为参数构建一个QFile对象。如果文件名中含有子目录，无论对于什么操作系统，子目录之间的分隔符都应该为“&#x2F;”。在对一个文件进行读&#x2F;写之前，需要使用成员函数open()打开该文件。对文本文件，使用QIODevice::Text。成员函数read()、readLine()或者readAll()从该文件读取数据，而成员函数write()向该文件写入数据。读取数据时，成员函数atEnd()判断是否已经抵达文件末尾。完成所有写入操作后，应该调用成员函数close()关闭文件。这个操作过程和C语言对文件的操作过程类似.<br>和C语言的文件操作相比，QFile使用起来更方便。比如其成员函数exist()能够判断一个文件是否存在，成员函数size()能够返回一个文件的长度，成员函数remove()可以删除一个文件。在C语言中，以上每项功能都需要好几条语句才能够实现.</p>
+<h1 id="类QTextStream"><a href="#类QTextStream" class="headerlink" title="类QTextStream"></a>类QTextStream</h1><p>类QTextStream负责将程序中的数据转换为文本格式，存放在QIODevice、QString或者QByteArray对象中。它也可以做反方向的读取操作。在这一点上，它和iostream中流类的功能类似。然而，QTextStream具有以下不同的特征。</p>
+<ul>
+<li>QTextStream在其内部使用两个字节长的QChar类型存放每个字符，使用Unicode编码方式。iostream使用类模板basic_ios及其子类来表示流类，每个字符的类型由模板参数charT指定。除了标准库中已经特化的char、wchar_t类型外，charT还可以取其他类型。而Qt中的QTextStream是一个类而不是一个类模板，字符的类型固定为QChar类型。这种处理方式大大简化了Qt流的总体结构，但缺点也是很明显的：即使被处理字符可以用一个字节表示，在内存中每个字符也会占用两个字节。另外，这种方式难以处理超过65536个字符的字符集。</li>
+<li>借助QTextCodec，QTextStream能够将内部的Unicode编码的字符转换为其他多种字符编码方式，存放在一个QIODevice或者QByteArray对象中，也能够读取这些对象中的数据并做逆向的编码转换。</li>
+</ul>
+<p>虽然iostream的类locale提供了一个框架，用于各种字符编码方式的数据存取，但是iostream本身并没有提供足够多的facet类来实现各种字符编码。由于字符的编码方式种类繁多，大多数编码方式具有复杂、烦琐的规范，依靠C++程序员来实现这些facet类将是一个烦琐的工作。而Qt则不同。类QTextCodec创建并维护一个对象池，每个对象实现某种编码方式和Unicode编码之间的转换。通过调用QTextStream的成员函数setCodec()，选择对象池中的某个对象，完成Unicode和所选编码方式之间的转换</p>
+<h1 id="类QDataStream"><a href="#类QDataStream" class="headerlink" title="类QDataStream"></a>类QDataStream</h1><p>QDataStream负责以二进制方式输出或者输入程序中对象。输入源或者输出目标可以是一个QIODevice对象或者一个QByteArray对象，其中最常见的是QIODevice的子类QFile<br>QDataStream为我们提供了以下丰富的功能<br>（1）统一的字节序。在默认情况下，写入QDataStream的整数都会被转换big-endian字节序，再写入文件。读取时做反向的转换。当然，我们也可以调用其成员函数setByteOrder()，将字节序设置为little-endian。<br>（2）支持多种Qt类型的输&#x2F;输出。QDataStream不但能够处理C++的标准类型比如int、double，还能够处理Qt中的多种类型，比如QbyteArray，Qfont，Qimage，Qpixmap以及QString等。它甚至还可以处理Qlist，QMap这些具有复杂内部结构的类模板。<br>（3）支持运算符“&gt;&gt;”以及“&lt;&lt;”。在iostream中，即使以二进制方式创建一个流对象，这两个运算符仍旧执行的是文本格式的输出和输入。而QDataStream则不同。通过运算符重载机制，施加在QDataStream的“&gt;&gt;”以及“&lt;&lt;”以二进制方式读&#x2F;写。<br>以上这些是标准库iostream做不到的</p>
+<h1 id="类QLocale"><a href="#类QLocale" class="headerlink" title="类QLocale"></a>类QLocale</h1><p>QLocale负责实现区域文化。和标准库中的类locale相比，QLocale容易使用但是可扩充性差。QLocale为每种区域文化定义了统一的名字，这个名字不会随着操作系统、编译器平台的变化而变化，使得QLocale更容易使用<br>QLocale使用方式也更简单。类locale由多个facet对象组成，每个facet对象负责实现某一个文化刻面，比如子类num_put只负责将C++基本类型的数据转换为文本格式。为了按照某一文化刻面输出数据，需要查询、获得对应的facet对象。而QLocale没有这么复杂的设计，它直接提供了一组名为toString的成员函数，将short，ushort，int，uint，qlonglong，qulonglong，float，double，QDate，QTime，QDateTime等类型转换为文本格式，存放在一个QString对象中。另一方面，它提供了一组形如toShort，toUShort，…，toDateTime这样的成员函数做逆向转换。<br>QLocale常和QTextStream一起使用。QTextStream有一个成员函数setLocale()，用于设置数据输入&#x2F;输出时的区域文化.</p>
+<h1 id="iostream和Qt流类的比较"><a href="#iostream和Qt流类的比较" class="headerlink" title="iostream和Qt流类的比较"></a>iostream和Qt流类的比较</h1><p>Qt的流类和标准库中的iostream相比，Qt流类功能丰富，易于使用，但是可扩展性差。而iostream具有良好的可扩展性，但是其本身的功能偏弱。<br>最明显的例证是对Unicode的支持。iostream大量使用了类模板。理论上，将这些类模板的模板参数charT设置为能够处理Unicode字符的某种类型，再对类模板char_traits进行特化以描述Unicode字符的特征，就可以使iostream的流类支持Unicode字符。再设计适当的facet子类，描述如何将Unicode字符写入文件或者从文件读出，就可以使iostream能够输入&#x2F;输出Unicode字符。但是，实际上iostream本身并没有完成以上功能。</p>
+<p>而Qt的流类恰好相反。所有的Qt流类仅仅是普通类，并非类模板。这些流类将字符的类型固定为QChar。当实际被处理字符可以使用char类型表示时，这种方案会浪费一半的存储空间。这种方案也无法处理占用更多字节的字符类型，扩展性比较差。但是，Qt的所有流类以及Qt中其他相关的类（QString）都约定QChar表示的就是Unicode字符，而QChar本身就提供了能够处理Unicode字符的一组函数，其中甚至包含判断字符书写方向这样的函数。而QTextCodec能够完成Unicode字符和各种编码方式之间的转换，使得Qt流类能够很好的支持Unicode。</p>
+<p>Qt的类QDataStream能够以二进制形式输入&#x2F;输出C++基本类型以及大部分Qt类。通过运算符重载机制，也可以处理用户自定义类型。而iostream没有提供以上功能。</p>
+
+    </div>
+
+    
+    
+    
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/C-QT/" rel="tag"># C++/QT</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2021/01/15/QString%E7%AE%80%E4%BB%8B-md/" rel="prev" title="QString简介">
+      <i class="fa fa-chevron-left"></i> QString简介
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2021/01/28/Qt%E5%85%83%E5%AF%B9%E8%B1%A1%E7%B3%BB%E7%BB%9F/" rel="next" title="Qt元对象系统">
+      Qt元对象系统 <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          Table of Contents
+        </li>
+        <li class="sidebar-nav-overview">
+          Overview
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Qt%E6%B5%81%E6%A1%86%E6%9E%B6%E5%9B%BE"><span class="nav-number">1.</span> <span class="nav-text">Qt流框架图</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BBQFile"><span class="nav-number">2.</span> <span class="nav-text">类QFile</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BBQTextStream"><span class="nav-number">3.</span> <span class="nav-text">类QTextStream</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BBQDataStream"><span class="nav-number">4.</span> <span class="nav-text">类QDataStream</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%B1%BBQLocale"><span class="nav-number">5.</span> <span class="nav-text">类QLocale</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#iostream%E5%92%8CQt%E6%B5%81%E7%B1%BB%E7%9A%84%E6%AF%94%E8%BE%83"><span class="nav-number">6.</span> <span class="nav-text">iostream和Qt流类的比较</span></a></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+  <p class="site-author-name" itemprop="name">dc</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">30</span>
+          <span class="site-state-item-name">posts</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">11</span>
+        <span class="site-state-item-name">tags</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2023</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">dc</span>
+</div>
+  <div class="powered-by">Powered by <a href="https://hexo.io/" class="theme-link" rel="noopener" target="_blank">Hexo</a> & <a href="https://mist.theme-next.org/" class="theme-link" rel="noopener" target="_blank">NexT.Mist</a>
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/muse.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
